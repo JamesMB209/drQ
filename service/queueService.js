@@ -3,27 +3,62 @@ const knex = require('knex')(knexFile);
 
 class Queue {
 	constructor(knex) {
-	this.knex=knex;
+		this.knex = knex;
 	}
+
+	// let noteId = await this.knex("notes")
+	//     .innerJoin("users", "notes.user_id", "users.id")
+	//     .select("notes.id")
+	//     .where("users.username", user)
+	//     .orderBy("notes.id", "asc")
+	//     .offset(index)
+	//     .limit("1");
 
 	async list(doctorId) {
-	//try {
-		let result = await this.knex('queue')
-		.select('id', 'patient_id')
-		.where('doctor_id',doctorId)
-		.orderBy('id','asc');
-	//} catch (err) {
-	//	console.log('error error !!! you done fucked up')
-	//	}
-	
-	return result;
+		try {
+			let result = await this.knex('queue')
+				.innerJoin('patient', 'queue.patient_id', 'patient.id')
+				.select('queue.id', 'queue.doctor_id', 'patient.f_name', 'patient.l_name')
+				.where('queue.doctor_id', doctorId)
+				.orderBy('created_at', 'asc');
+			return result;
+		} catch (err) {
+			console.log(`Listing error ${err}`)
+		}
+	}
+
+	async add(doctorId, patientId, checkedIn=false) {
+		try {
+			await this.knex('queue')
+				.insert({
+					doctor_id: doctorId,
+					patient_id: patientId,
+					checked_in: checkedIn
+				})
+		} catch (err) {
+			console.log(`Adding error ${err}`)
+		}
+	}
+
+	async remove(queueId) {
+		try {
+		await this.knex('queue')
+				.where('id', queueId)
+				.del()
+
+		} catch (err) {
+			console.log(`Removing error ${err}`)
+		}
+	}
+
+	async length(doctorId) {
+		try {
+			await this.knex('queue')
+		}
 	}
 
 
-
-	//add(doctorId, patientId)
-
-	//remove(patientId)
+//	async update()
 
 	//push to top of queue
 	//update(patientId)
@@ -35,9 +70,11 @@ class Queue {
 
 let testingQue = new Queue(knex);
 
-async function name() {
-await console.log(testingQue.list(1));
-await console.log("finished");
+function name() {
+	testingQue.list(1).then((data) => (console.log(data)));
+	testingQue.add(2, 1,true).then((data) => (console.log(data)));
+	testingQue.remove(10).then((data) => (console.log(data)));
+	console.log("finished");
 }
 
 name();
