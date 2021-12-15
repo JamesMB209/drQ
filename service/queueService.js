@@ -3,11 +3,11 @@ class Queue {
 		this.knex = knex;
 	}
 
-	list(doctorId) {
+	list() {
 		return this.knex('queue')
 			.innerJoin('patient', 'queue.patient_id', 'patient.id')
 			.select('queue.id', 'queue.doctor_id', 'patient.f_name', 'patient.l_name')
-			.where('queue.doctor_id', doctorId)
+			// .where('queue.doctor_id', doctorId)
 			.orderBy('created_at', 'asc');
 	}
 
