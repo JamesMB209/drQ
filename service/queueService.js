@@ -1,18 +1,7 @@
-const knexFile = require('../knexfile.js').development;
-const knex = require('knex')(knexFile);
-
 class Queue {
 	constructor(knex) {
 		this.knex = knex;
 	}
-
-	// let noteId = await this.knex("notes")
-	//     .innerJoin("users", "notes.user_id", "users.id")
-	//     .select("notes.id")
-	//     .where("users.username", user)
-	//     .orderBy("notes.id", "asc")
-	//     .offset(index)
-	//     .limit("1");
 
 	async list(doctorId) {
 		try {
@@ -51,14 +40,14 @@ class Queue {
 		}
 	}
 
-	async length(doctorId) {
-		try {
-			await this.knex('queue')
-		}
-	}
+	// async length(doctorId) {
+	// 	try {
+	// 		await this.knex('queue')
+	// 	}
+	// }
 
 
-//	async update()
+	// async update()
 
 	//push to top of queue
 	//update(patientId)
@@ -67,14 +56,4 @@ class Queue {
 	//length(doctorId) 
 }
 
-
-let testingQue = new Queue(knex);
-
-function name() {
-	testingQue.list(1).then((data) => (console.log(data)));
-	testingQue.add(2, 1,true).then((data) => (console.log(data)));
-	testingQue.remove(10).then((data) => (console.log(data)));
-	console.log("finished");
-}
-
-name();
+module.exports = Queue;
