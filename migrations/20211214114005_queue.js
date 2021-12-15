@@ -2,9 +2,9 @@
 exports.up = function(knex) {
 	return knex.schema.createTable('queue', (table) => {
 	table.increments().unique();
-	table.integer('patient_id').unsigned();
+	table.integer('patient_id');
 	table.foreign('patient_id').references('patient.id');
-	table.integer('doctor_id').unsigned();
+	table.integer('doctor_id');
 	table.foreign('doctor_id').references('doctor.id');
 	table.boolean('checked_in');	
 	table.timestamps(false, true);

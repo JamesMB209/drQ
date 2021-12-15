@@ -1,16 +1,43 @@
+const knexFile = require('../knexfile.js').development;
+const knex = require('knex')(knexFile);
+
 class Queue {
 	constructor(knex) {
-	this.knex=kenx;
+	this.knex=knex;
 	}
 
-	add(doctorId, patientId)
+	async list(doctorId) {
+	//try {
+		let result = await this.knex('queue')
+		.select('id', 'patient_id')
+		.where('doctor_id',doctorId)
+		.orderBy('id','asc');
+	//} catch (err) {
+	//	console.log('error error !!! you done fucked up')
+	//	}
+	
+	return result;
+	}
 
-	remove(patientId)
+
+
+	//add(doctorId, patientId)
+
+	//remove(patientId)
 
 	//push to top of queue
-	update(patientId)
+	//update(patientId)
 
-	list(doctorsId)
 
-	length(doctorId) 
+	//length(doctorId) 
 }
+
+
+let testingQue = new Queue(knex);
+
+async function name() {
+await console.log(testingQue.list(1));
+await console.log("finished");
+}
+
+name();

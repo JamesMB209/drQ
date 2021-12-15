@@ -1,4 +1,3 @@
-
 exports.up = function(knex) {
 	return knex.schema.createTable('patient', (table) => {
 		table.increments().unique();
