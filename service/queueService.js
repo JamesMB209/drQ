@@ -3,20 +3,15 @@ class Queue {
 		this.knex = knex;
 	}
 
-	async list(doctorId) {
-		try {
-			let result = await this.knex('queue')
-				.innerJoin('patient', 'queue.patient_id', 'patient.id')
-				.select('queue.id', 'queue.doctor_id', 'patient.f_name', 'patient.l_name')
-				.where('queue.doctor_id', doctorId)
-				.orderBy('created_at', 'asc');
-			return result;
-		} catch (err) {
-			console.log(`Listing error ${err}`)
-		}
+	list(doctorId) {
+		return this.knex('queue')
+			.innerJoin('patient', 'queue.patient_id', 'patient.id')
+			.select('queue.id', 'queue.doctor_id', 'patient.f_name', 'patient.l_name')
+			.where('queue.doctor_id', doctorId)
+			.orderBy('created_at', 'asc');
 	}
 
-	async add(doctorId, patientId, checkedIn=false) {
+	async add(doctorId, patientId, checkedIn = false) {
 		try {
 			await this.knex('queue')
 				.insert({
@@ -31,7 +26,7 @@ class Queue {
 
 	async remove(queueId) {
 		try {
-		await this.knex('queue')
+			await this.knex('queue')
 				.where('id', queueId)
 				.del()
 
