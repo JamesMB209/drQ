@@ -23,6 +23,7 @@ app.use(express.json());
 
 app.use(express.static('public'));
 http.listen(8000);
+console.log("App listening to port 8000")
 
 async function main() {
     let queue = null;
@@ -79,21 +80,8 @@ async function main() {
         });
     });
 
-
     //route to create new patient
-    // app.post("/patient", (req, res) => {
-    //     // console.log(req.body);
-    //     //#######Code Me########
-    //     // Need to sanitise input.
-
-    //     // If valid create new patient.
-
-    //     // Add this paitent to the doctors queue.
-
-    //     //on submission of data send a post to the endpoint /patients/:patientName
-    //     // res.redirect(200, `/patient/${req.body.doctorName}/${req.body.patientName}`) //not sanatised.
-
-    // })
+  
 
     // let patientRouter = new PatientRouter(axios);
     // app.use("/patient", patientRouter.router());
@@ -109,8 +97,11 @@ async function main() {
 }
 main();
 
-
-
+//for pris to check form data
+app.post("/patient", (req, res) => {
+    console.log(req.body);
+    // DOCTOR[req.body.doctorId].add(new patient(re.body.fname, req.body.lname, req.body.hkid))
+})
 
 
 
