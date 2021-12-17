@@ -1,68 +1,71 @@
 const fs = require("fs");
 const path = require("path");
 const express = require("express");
-// const handlebars = require("express-handlebars");
 const { engine } = require("express-handlebars");
-
 const knexFile = require('./knexfile.js').development;
 const knex = require('knex')(knexFile);
-const Queue = require("./service/queueService");
+// const Queue = require("./service/queueService");
 const Doctor = require("./service/doctorService");
+const DoctorRouter = require("./router/doctorRouter");
+const PatientRouter = require("./router/patientRouter.js");
 
 var app = express();
 const http = require("http").Server(app);
 const io = require("socket.io")(http);
-
 const viewsPath = path.join(__dirname, "./views");
 
 app.engine("handlebars", engine());
 app.set("view engine", "handlebars");
 app.set("views", viewsPath);
+app.use(express.urlencoded({ extended: false }))
+app.use(express.json());
 
-
-
-//////////////////////////////////
-let doctorRoom = "/doctor1";
-
-app.get("/", (req, res) => {
-    res.render("doctor", {
-        room:doctorRoom,
-    });
-});
-
-const nameSpaceOne = io.of(doctorRoom);
-
-nameSpaceOne.on("connection", (socket) => {
-    
-    socket.on("next", ()=> {
-        console.log("remove from queue send next person")
-    })
-});
-////////////////////////////////////
-let doctorRoom2 = "/doctor2";
-
-app.get("/doc2", (req, res) => {
-    res.render("doctor", {
-        room:doctorRoom2,
-    });
-});
-
-const nameSpaceTwo = io.of(doctorRoom2);
-
-nameSpaceTwo.on("connection", (socket) => {
-    
-    socket.on("next", ()=> {
-        console.log("remove from agasfgasdfd next person")
-    })
-});
-
-
-
-
-
-
+app.use(express.static('public'));
 http.listen(8000);
 
+async function main() {
+    let office = await knex("doctor")
+        .select("id", "f_name", "l_name", "room")
+
+    // Create nameSpaces from doctors.
+    office.forEach((doctor) => {
+        app.use("/doctor", new DoctorRouter(new Doctor(doctor), io).router());
+    })
+
+    //Patient logic, This is the check in form that will dynamicly create patients
+    app.get("/checkin", (req, res) => {
+        res.render("patientCheckIn", {
+            doctor:office,
+        });
+    });
+    //route to create new patient
+    app.post("/patient", (req, res) => {
+        console.log(req.body);
+        //#######Code Me########
+        // Need to sanitise input.
+
+        // If valid create new patient.
+
+        // Add this paitent to the doctors queue.
+
+        //on submission of data send a post to the endpoint /patients/:patientName
+        res.redirect(200, `/patient/${req.body.doctorName}/${req.body.patientName}`) //not sanatised.
+        
+    })
+
+    let patientRouter = new PatientRouter(http);
+    app.use("/patient", patientRouter.router());
+
+    // app.get("/patient/james", (req, res) => {
+    //     res.render("patient", {
+    //         room: "/james",
+    //         fName: "paitent.fName",
+    //         lName: "paitent.LName",
+    //         quePos: "paitent.quePosition())the first one)"
+    //     });
+    // });
+}
+main();
 
 
 
@@ -78,9 +81,35 @@ http.listen(8000);
 
 
 
+// ////////////////////////////////////
 
+// io.of("/james").on("connection", (socket) => {
 
+//     socket.on("next", () => {
+//         console.log("remove from queue send next person")
+//         io.of("/james").emit("queue_update", {
+//             quePos: "paitent.quePosition())the next one)"
+//         })
+//     })
+// });
+// ////////////////////////////////////
+// let doctorRoom2 = "/doctor2";
 
+// app.get("/doc2", (req, res) => {
+//     res.render("doctor", {
+//         room: doctorRoom2,
+//     });
+// });
+
+// const nameSpaceTwo = io.of(doctorRoom2);
+
+// nameSpaceTwo.on("connection", (socket) => {
+
+//     socket.on("next", () => {
+//         console.log("remove from agasfgasdfd next person")
+//     })
+// });
+// ////////////////////////////////////
 
 
 // // a place for us to test our code right now

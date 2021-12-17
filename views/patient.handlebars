@@ -1,0 +1,13 @@
+<p>Patient: {{fName}}</p>
+<p id="queue_position">{{quePos}}</p>
+
+<script>
+      $(() => {
+        var socket = io("{{room}}");
+
+        socket.on("queue_update", (data) => {
+            console.log(data);
+          $("#queue_position").html(data.quePos);
+        });
+      });
+</script>

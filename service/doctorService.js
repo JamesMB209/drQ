@@ -1,28 +1,16 @@
 class Doctor {
-	constructor(id, fName, lName, room, knex, socket) {
-		this.initPromise = null;
-		this.knex = knex;
-		this.fName = fName;
-		this.lName = lName;
-		this.room = room;
-		this.socket = socket;
-		this.id = id;
+	constructor(doctor) {
+		this.id = doctor.id;
+		this.fName = doctor.f_name;
+		this.lName = doctor.l_name;
+		this.room = doctor.room;
+		
+		this.fullName = `${doctor.f_name} ${doctor.l_name}`;
+		this.queue = ["patient1", "patient2", "patient3"];
 	}
 
-
-
-	next() {
-		// emits from socket/io "ID removed from Que"
-		// all just notes
-		// this.remove
-	}
-
-	list() {
-		return this.knex('queue')
-			.innerJoin('patient', 'queue.patient_id', 'patient.id')
-			.select('queue.id', 'queue.doctor_id', 'patient.f_name', 'patient.l_name')
-			.where('queue.doctor_id', this.id)
-			.orderBy('created_at', 'asc');
+	addToQueue () {
+		
 	}
 
 }

@@ -1,0 +1,14 @@
+<p>this is the form they use to enter their details, it will post to the doctor
+  that they are joining the que off</p>
+<form action="/patient" method="post">
+  <label>choose doctor</label>
+  <ul>
+    {{#each doctor}}
+      <li value="{{id}}">Doctor:{{f_name}} {{l_name}} in room {{room}}</li>
+    {{/each}}
+  </ul>
+  <input name="patientName" value="bibek" />
+  <input name="doctorName" value="james" />
+  <input name="temperature" value="36" />
+  <button type="submit" value="checkIn">check in </button>
+</form>

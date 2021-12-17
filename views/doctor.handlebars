@@ -1,13 +1,14 @@
+<p>doctor: {{fName}}</p>
 <button id="next">next</button>
+
 
 <script>
       $(() => {
-        var socket = io("{{room}}"); //this will be a var {{doctor}}
+        var socket = io("{{nameSpace}}");
 
         $("#next").on("click", () => {
           socket.emit("next");
-          console.log("dude hit next");
+          console.log("next patient");
         });
       });
     </script>
-
