@@ -25,25 +25,52 @@ app.use(express.static('public'));
 http.listen(8000);
 
 async function main() {
+    let queue = null;
+    let arrayOfDoctors =[];
     let office = await knex("doctor")
         .select("id", "f_name", "l_name", "room")
 
-            let arrayofDoctors = [];
-    // Create nameSpaces from doctors.
+    // Create doctors.
     office.forEach((doctor) => {
-        app.use("/doctor", new DoctorRouter(new Doctor(doctor), io).router());
-
+        arrayOfDoctors.push(new Doctor(doctor));
     })
+    console.log(arrayOfDoctors)
+    
+    // Set up Socket IO
+    io.on("connection", (socket) => {
+        socket.on("start", (room) => {
+          chatroom = room;
+          socket.join(room);
+          console.log(`A user has connected to room ${room}`);
+        //   arrayOfRoom.push(room);
+        //   console.log(arrayOfRoom);
+        });
+      
+        socket.on("next", (data)=>{
+            console.log(`doctor pressed next ${data}`)
+            io.to(chatroom).emit("queuestep")
+        })
+        //handle the chat event emitted from the front end
+        // socket.on("chat", function (data) {
+        //   io.to(chatroom).emit("chat", data);
+        // });
+        // //handle the isTyping event emitted from the front end
+        // socket.on("isTyping", function (data) {
+        //   socket.broadcast.to(chatroom).emit("isTyping", data);
+        // });
+      });
+      
 
-    app.get("/doctor", (req, res) => {
+    app.get("/doctor/:id", (req, res) => {
         res.render("doctor", {
-            nameSpace: `/james`,
-            fName: "james",
-            lName: "betts",
-            fullName: "james betts",
-            queue: ["test","test","test"],
+            doctor:arrayOfDoctors[parseInt(req.params.id)-1],
         });
     });
+
+    app.get("/queue/:doctor/:patient", (req, res) => {
+        res.render("patient")
+    });
+    
 
     //Patient logic, This is the check in form that will dynamicly create patients
     app.get("/checkin", (req, res) => {
@@ -51,23 +78,25 @@ async function main() {
             doctor: office,
         });
     });
+
+
     //route to create new patient
-    app.post("/patient", (req, res) => {
-        // console.log(req.body);
-        //#######Code Me########
-        // Need to sanitise input.
+    // app.post("/patient", (req, res) => {
+    //     // console.log(req.body);
+    //     //#######Code Me########
+    //     // Need to sanitise input.
 
-        // If valid create new patient.
+    //     // If valid create new patient.
 
-        // Add this paitent to the doctors queue.
+    //     // Add this paitent to the doctors queue.
 
-        //on submission of data send a post to the endpoint /patients/:patientName
-        res.redirect(200, `/patient/${req.body.doctorName}/${req.body.patientName}`) //not sanatised.
+    //     //on submission of data send a post to the endpoint /patients/:patientName
+    //     // res.redirect(200, `/patient/${req.body.doctorName}/${req.body.patientName}`) //not sanatised.
 
-    })
+    // })
 
-    let patientRouter = new PatientRouter(axios);
-    app.use("/patient", patientRouter.router());
+    // let patientRouter = new PatientRouter(axios);
+    // app.use("/patient", patientRouter.router());
 
     // app.get("/patient/james", (req, res) => {
     //     res.render("patient", {

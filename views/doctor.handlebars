@@ -1,14 +1,22 @@
+{{#with doctor}}
 <p>doctor: {{fName}}</p>
+<p>doctor: {{lName}}</p>
+<p>doctor: {{fullName}}</p>
+<p>doctor id: {{id}}</p>
+<p>doctor queue: {{queue}}</p>
 <button id="next">next</button>
 
 
 <script>
       $(() => {
-        var socket = io("{{nameSpace}}");
+        let socket = io.connect("http://localhost:8000");
+        // var socket = io("{{nameSpace}}");
+        socket.emit("start", "{{id}}");
 
         $("#next").on("click", () => {
-          socket.emit("next");
+          socket.emit("next", "{{id}}");
           console.log("next patient");
         });
       });
     </script>
+{{/with}}

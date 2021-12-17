@@ -15,16 +15,16 @@ class DoctorRouter {
         return router;
     }
 
-    listen() {
-        this.io.of(`/${this.doctor.fName}`).on("connection", (socket) => {
-			socket.on("next", () => {
-				console.log("remove from queue send next person")
-				this.io.of(`/${this.doctor.fName}`).emit("queue_update", {
-					quePos: "paitent.quePosition())the next one)"
-				})
-			})
-		});
-    }
+    // listen() {
+    //     this.io.of(`/${this.doctor.fName}`).on("connection", (socket) => {
+	// 		socket.on("next", () => {
+	// 			console.log("remove from queue send next person")
+	// 			this.io.of(`/${this.doctor.fName}`).emit("queue_update", {
+	// 				quePos: "paitent.quePosition())the next one)"
+	// 			})
+	// 		})
+	// 	});
+    // }
 
     get(req, res) {
         res.json({
