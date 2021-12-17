@@ -4,6 +4,7 @@ const express = require("express");
 const { engine } = require("express-handlebars");
 const knexFile = require('./knexfile.js').development;
 const knex = require('knex')(knexFile);
+const axios = require('axios')
 // const Queue = require("./service/queueService");
 const Doctor = require("./service/doctorService");
 const DoctorRouter = require("./router/doctorRouter");
@@ -27,20 +28,32 @@ async function main() {
     let office = await knex("doctor")
         .select("id", "f_name", "l_name", "room")
 
+            let arrayofDoctors = [];
     // Create nameSpaces from doctors.
     office.forEach((doctor) => {
         app.use("/doctor", new DoctorRouter(new Doctor(doctor), io).router());
+
     })
+
+    app.get("/doctor", (req, res) => {
+        res.render("doctor", {
+            nameSpace: `/james`,
+            fName: "james",
+            lName: "betts",
+            fullName: "james betts",
+            queue: ["test","test","test"],
+        });
+    });
 
     //Patient logic, This is the check in form that will dynamicly create patients
     app.get("/checkin", (req, res) => {
         res.render("patientCheckIn", {
-            doctor:office,
+            doctor: office,
         });
     });
     //route to create new patient
     app.post("/patient", (req, res) => {
-        console.log(req.body);
+        // console.log(req.body);
         //#######Code Me########
         // Need to sanitise input.
 
@@ -50,10 +63,10 @@ async function main() {
 
         //on submission of data send a post to the endpoint /patients/:patientName
         res.redirect(200, `/patient/${req.body.doctorName}/${req.body.patientName}`) //not sanatised.
-        
+
     })
 
-    let patientRouter = new PatientRouter(http);
+    let patientRouter = new PatientRouter(axios);
     app.use("/patient", patientRouter.router());
 
     // app.get("/patient/james", (req, res) => {

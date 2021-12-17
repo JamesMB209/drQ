@@ -1,8 +1,8 @@
 const express = require("express");
 
 class PatientRouter {
-    constructor(http) {
-        this.http = http;
+    constructor(axios) {
+        this.axios = axios;
         this.router();
     }
 
@@ -12,18 +12,21 @@ class PatientRouter {
         return router;
     }
 
-    get(req, res) {
+    async get(req, res) {
         //Render the details about their position in the queue.
-        console.log(req.params)
-        console.log(this.http);
-        this.http.get(`/doctor/${req.params.doctor}`, (res) => {
-            console.log(res)
-        })
+        console.log(req.params.doctor);
+        try {
+            let queue = await this.axios
+                .get(`/doctor/${req.params.doctor}`)
+        } catch {
+            console.log('error')
+        }
+
         res.render("patient", {
-                room: "/james",
-    //         fName: "paitent.fName",
-    //         lName: "paitent.LName",
-    //         quePos: "paitent.quePosition())the first one)"
+            room: "/james",
+            //         fName: "paitent.fName",
+            //         lName: "paitent.LName",
+            //         quePos: "paitent.quePosition())the first one)"
         });
     };
 }

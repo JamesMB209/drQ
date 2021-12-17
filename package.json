@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/JamesMB209/drQ#readme",
   "dependencies": {
+    "axios": "^0.24.0",
     "bcrypt": "^5.0.1",
     "cookie-parser": "^1.4.6",
     "dotenv": "^10.0.0",

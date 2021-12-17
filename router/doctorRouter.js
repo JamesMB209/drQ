@@ -27,7 +27,7 @@ class DoctorRouter {
     }
 
     get(req, res) {
-        res.render("doctor", {
+        res.json({
             nameSpace: `/${this.doctor.fName}`,
             fName: this.doctor.fName,
             lName: this.doctor.lName,
