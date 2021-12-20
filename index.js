@@ -71,7 +71,7 @@ async function main() {
             })
         } catch(err) {
             console.log(err)
-            res.send(404); // send to 404 page.
+            res.send(404); // send to 404 page. ########### needs to be completed
         }
     });
 
