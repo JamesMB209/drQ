@@ -4,23 +4,35 @@ class Doctor {
 		this.fName = doctor.f_name;
 		this.lName = doctor.l_name;
 		this.room = doctor.room;
-		this.knex = knex;
-		
+		// this.knex = knex;
+
 		this.fullName = `${doctor.f_name} ${doctor.l_name}`;
-		this.queue = ["patient1", "patient2", "patient3"];
+		this.queue = [];
+	}
+	patient(url) {
+		return new Promise((res, rej) => {
+			url = url.toLowerCase();
+			console.log(this.queue.findIndex(patient => patient.url == url) === -1)
+
+			if (this.queue.findIndex(patient => patient.url == url) === -1) { rej("patient not found") };
+
+			this.queue.find(patient => patient.url == url).queuePosition = this.queue.findIndex(patient => patient.url == url);
+			res(this.queue.find(patient => patient.url == url));
+		})
 	}
 
-	addToQueue (doctorId) {
-		if (this.id[0] !== undefined && this.id[0] == doctorId) {
-			this.queue.push() // push new patient
-		} res.redirect("/")
+	addToQueue(doctorId) {
+		// if (this.id[0] !== undefined && this.id[0] == doctorId) {
+		// 	this.queue.push() // push new patient
+		// } res.redirect("/")
+		this.queue.push(doctorId);
 	}
 
 	nextInLine() {
 		if (this.queue.length !== 0) {
 			return this.queue[0]
 		} res.end("No more patients waiting.")
-	}	
+	}
 
 	length() {
 		if (this.id[0] !== undefined) {
@@ -31,22 +43,22 @@ class Doctor {
 
 	save(patientId, doctorId/*, updated_at*/) {
 		return this.knex("queue")
-		.insert({
-			patient_id: patientId,
-			doctor_id: doctorId,
-			checked_in: true
-		})
-		.then((result) => {
-			console.log(`Patients data saved successfully! New data: ${result}`)
-		})
+			.insert({
+				patient_id: patientId,
+				doctor_id: doctorId,
+				checked_in: true
+			})
+			.then((result) => {
+				console.log(`Patients data saved successfully! New data: ${result}`)
+			})
 	}
 
 	list() {
 		return this.knex('queue')
-		.innerJoin('patient', 'queue.patient_id', 'patient.id')
-		.select('queue.id', 'queue.doctor_id', 'patient.f_name', 'patient.l_name')
-		.where('queue.doctor_id', this.id)
-		.orderBy('created_at', 'asc');
+			.innerJoin('patient', 'queue.patient_id', 'patient.id')
+			.select('queue.id', 'queue.doctor_id', 'patient.f_name', 'patient.l_name')
+			.where('queue.doctor_id', this.id)
+			.orderBy('created_at', 'asc');
 	}
 
 }
