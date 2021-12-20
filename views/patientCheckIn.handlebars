@@ -1,30 +1,25 @@
 <p>this is the form they use to enter their details, it will post to the doctor
-  that they are joining the que off</p>
+  that they are joining the queue off</p>
 
 <form action="/patient" method="post">
-  <label>choose doctor</label>
+  <label>choose a doctor:</label>
   <ul>
     {{#each doctor}}
-      <li value="{{id}}">Doctor:{{f_name}} {{l_name}} in room {{room}}</li>
+      <input type="radio" name="doctorId" value="{{id}}"> Dr {{f_name}} {{l_name}} <br>
     {{/each}}
   </ul>
-  
-  <label for="f_name">First Name</label><br>
-  <input name="patientName" placeholder="first name" value="" /> <br>
 
- <label for="l_name">Last Name</label><br>
-  <input name="patientName" placeholder="first name" value="" /> <br>
+  <br>
+  <label for="patientName">Name</label><br>
+  <input name="patientName" placeholder="name" value="" /> <br>
 
-
-  <label for="doctor">Select a doctor</label> <br>
-    <select id="" name="doctorName"> 
-      <option value="Dr Kharel">Dr Kharel</option>
-      <option value="Dr Cheng">Dr Cheng</option>
-      <option value="Dr Betts">Dr Betts</option>
-    </select> <br>
+<!--
 
 <label for="temperature">Temperature</label><br>
-  <input name="temperature" value="" placeholder="celsius" />
+  <input name="temperature" value="" placeholder="celsius" /> 
+  
+  <li value="{{id}}">Doctor: {{f_name}} {{l_name}} in room {{room}}</li>
+  -->
 
   <br>
   <button type="submit" value="checkIn">check in </button>
