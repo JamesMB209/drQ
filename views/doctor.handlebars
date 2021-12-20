@@ -10,11 +10,10 @@
 <script>
       $(() => {
         let socket = io.connect("http://localhost:8000");
-        // var socket = io("{{nameSpace}}");
         socket.emit("start", "{{id}}");
 
         $("#next").on("click", () => {
-          socket.emit("next", "{{id}}");
+          socket.emit("next", {{id}});
           console.log("next patient");
         });
       });

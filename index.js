@@ -34,7 +34,6 @@ async function main() {
     office.forEach((doctor) => {
         arrayOfDoctors.push(new Doctor(doctor));
     })
-    console.log(arrayOfDoctors)
     
     // Set up Socket IO
     io.on("connection", (socket) => {
@@ -42,37 +41,34 @@ async function main() {
           chatroom = room;
           socket.join(room);
           console.log(`A user has connected to room ${room}`);
-        //   arrayOfRoom.push(room);
-        //   console.log(arrayOfRoom);
         });
       
         socket.on("next", (data)=>{
             console.log(`doctor pressed next ${data}`)
-            io.to(chatroom).emit("queuestep")
+            console.log(arrayOfDoctors[data-1].queue.shift());
+            
+            io.to(chatroom).emit("update")
         })
-        //handle the chat event emitted from the front end
-        // socket.on("chat", function (data) {
-        //   io.to(chatroom).emit("chat", data);
-        // });
-        // //handle the isTyping event emitted from the front end
-        // socket.on("isTyping", function (data) {
-        //   socket.broadcast.to(chatroom).emit("isTyping", data);
-        // });
       });
       
-
+    // Set up requests
+    // Doctor dashboard -- needs auth
     app.get("/doctor/:id", (req, res) => {
         res.render("doctor", {
             doctor:arrayOfDoctors[parseInt(req.params.id)-1],
         });
     });
 
+    // Patient dashboard.
     app.get("/queue/:doctor/:patient", (req, res) => {
-        res.render("patient")
+        let patient = arrayOfDoctors[parseInt(req.params.doctor)-1].nextInLine();
+        console.log(patient);
+        res.render("patient", {
+            patient:patient,
+        })
     });
     
-
-    //Patient logic, This is the check in form that will dynamicly create patients
+    // Patient checkin point.
     app.get("/checkin", (req, res) => {
         res.render("patientCheckIn", {
             doctor: office,
