@@ -1,33 +1,52 @@
 <p>this is the form they use to enter their details, it will post to the doctor
   that they are joining the que off</p>
 
+{{!-- 
+send vars in this format.
+
+patient.
+  fName
+  lName
+  temperature
+  doctor 
+  HKID
+    
+  --}}
+
+
 <form action="/patient" method="post">
   <label>choose doctor</label>
   <ul>
     {{#each doctor}}
-      <li value="{{id}}">Doctor:{{f_name}} {{l_name}} in room {{room}}</li>
+      <option value="{{id}}">Doctor:{{fName}}
+        {{lName}}
+        in room
+        {{room}}</option>
     {{/each}}
   </ul>
-  
-  <label for="f_name">First Name</label><br>
-  <input name="patientName" placeholder="first name" value="" /> <br>
 
- <label for="l_name">Last Name</label><br>
-  <input name="patientName" placeholder="first name" value="" /> <br>
+  <label for="f_name">First Name</label><br />
+  <input name="fName" placeholder="first name" value="" />
+  <br />
 
+  <label for="l_name">Last Name</label><br />
+  <input name="lName" placeholder="first name" value="" />
+  <br />
 
-  <label for="doctor">Select a doctor</label> <br>
-    <select id="" name="doctorName"> 
-      <option value="Dr Kharel">Dr Kharel</option>
-      <option value="Dr Cheng">Dr Cheng</option>
-      <option value="Dr Betts">Dr Betts</option>
-    </select> <br>
+  <label for="doctor">Select a doctor</label>
+  <br />
 
-<label for="temperature">Temperature</label><br>
+  <select id="" name="doctor">
+    {{#each doctor}}
+      <option value="{{id}}">Doctor:{{fName}}{{lName}} inroom {{room}}</option>
+    {{/each}}
+  </select>
+  <br />
+
+  <label for="temperature">Temperature</label><br />
   <input name="temperature" value="" placeholder="celsius" />
 
-  <br>
+  <br />
   <button type="submit" value="checkIn">check in </button>
- 
 
 </form>

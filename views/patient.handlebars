@@ -1,13 +1,31 @@
+{{!-- // You get sent an object with 
+Patient {
+  fName: 'test',
+  lName: 'test',
+  temperature: '',
+  assignedDoctor: '1',
+  fullName: 'test test',
+  url: 'test_test',
+  arrived: 2021-12-20T07:53:46.388Z,
+  departed: '',
+  queuePosition: 0
+} --}}
+
+
+
+{{#with patient}}
 <p>Patient: {{fName}}</p>
-<p id="queue_position">{{quePos}}</p>
+<p id="queue_position">{{queuePosition}}</p>
 
 <script>
       $(() => {
-        var socket = io("{{room}}");
+        let socket = io.connect("http://localhost:8000");
 
-        socket.on("queue_update", (data) => {
-            console.log(data);
-          $("#queue_position").html(data.quePos);
+        socket.on("update", () => {
+            console.log("updating");
+            
+          $("#queue_position").html(data.quePos); // note.
         });
       });
 </script>
+{{/with}}
