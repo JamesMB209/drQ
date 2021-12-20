@@ -1,13 +1,18 @@
-class Patient extends Queue {
-	constructor(fName, lName) {
-	super();
-	this.fName = fName;
-	this.lName = lName;
-	this.fullName = `${fName} ${lName}`; 
+class Patient {
+	constructor(patient) {
+	this.fName = patient.fName;
+	this.lName = patient.lName;
+	this.temperature = patient.temperature 
+	this.assignedDoctor = patient.doctor;
 
+	this.fullName = `${this.fName} ${this.lName}`;
+	this.url = `${this.fName}_${this.lName}`.toLowerCase();
+	this.queuePosition;
 	this.arrived = new Date;
 	this.departed = "";
 	}
 
 	//index in queue (can be some logic in here to calculate and return average waiting time)
 }
+
+module.exports = Patient;
