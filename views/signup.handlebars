@@ -1,0 +1,24 @@
+{{!-- this will be the signup page --}}
+
+
+
+<form action="/signup" method="post">
+    <label for="username">Username <br />
+    <input type="text" name="username" id="username" required>
+    </label>
+    <br />
+    <label for="password">Password <br />
+    <input type="password" name="password" id="password" required>
+    </label>
+    <br />
+    <label for="tag" id="tag">Select one:</label>
+    <br />
+    <select name="tag" id="tag" required>
+        <br />
+        <option></option>
+        <option name="tag" value="doctor">Doctor</option>
+        <option name="tag" value="reception">Reception</option>
+    </select>
+    <br />
+    <button type="submit">Create account</button>
+</form>
