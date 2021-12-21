@@ -12,7 +12,6 @@ class Doctor {
 	patient(url) {
 		return new Promise((res, rej) => {
 			url = url.toLowerCase();
-			console.log(this.queue.findIndex(patient => patient.url == url) === -1)
 
 			if (this.queue.findIndex(patient => patient.url == url) === -1) { rej("patient not found") };
 
@@ -21,24 +20,27 @@ class Doctor {
 		})
 	}
 
-	addToQueue(doctorId) {
+	addToQueue(patient) {
 		// if (this.id[0] !== undefined && this.id[0] == doctorId) {
 		// 	this.queue.push() // push new patient
 		// } res.redirect("/")
-		this.queue.push(doctorId);
+		this.queue.push(patient);
 	}
 
-	nextInLine() {
-		if (this.queue.length !== 0) {
-			return this.queue[0]
-		} res.end("No more patients waiting.")
+	next() {
+		// if (this.queue.length !== 0) {
+		// 	return this.queue[0]
+		// } res.end("No more patients waiting.")
+		this.queue.shift() // save to history 
+		this.queue.map(patient => patient.queuePosition--)
 	}
 
 	length() {
-		if (this.id[0] !== undefined) {
-			let length = this.queue.length
-			return `Total number of patient: ${length}`
-		}
+		// if (this.id[0] !== undefined) {
+		// 	let length = this.queue.length
+		// 	return `Total number of patient: ${length}`
+		// }
+		return this.queue.length;
 	}
 
 	save(patientId, doctorId/*, updated_at*/) {

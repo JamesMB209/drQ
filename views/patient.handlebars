@@ -1,31 +1,42 @@
-{{!-- // You get sent an object with 
-Patient {
-  fName: 'test',
-  lName: 'test',
-  temperature: '',
-  assignedDoctor: '1',
-  fullName: 'test test',
-  url: 'test_test',
-  arrived: 2021-12-20T07:53:46.388Z,
-  departed: '',
-  queuePosition: 0
-} --}}
+<p id="fName"></p>
+<p id="lName"></p>
+<p id="fullName"></p>
+<p id="queue_position"></p>
 
-
-
-{{#with patient}}
-<p>Patient: {{fName}}</p>
-<p id="queue_position">{{queuePosition}}</p>
 
 <script>
       $(() => {
-        let socket = io.connect("http://localhost:8000");
+        //on first page load insert data
+        axios
+            .get("/api/{{doctor}}/{{patient}}")
+            .then((data) => {
+              let patient = data.data.patient;
+              $("#fName").html(patient.fName);
+              $("#lName").html(patient.lName);
+              $("#fullName").html(patient.fullName);
+              $("#queue_position").html(patient.queuePosition);
 
-        socket.on("update", () => {
-            console.log("updating");
-            
-          $("#queue_position").html(data.quePos); // note.
-        });
+              //Set up socket connection
+              let socket = io.connect("http://localhost:8000");
+              socket.emit("start", `${patient.assignedDoctor}`);
+
+              //set up listners
+              socket.on("update", () => {
+                  console.log("updating");
+                  
+                  axios
+                    .get("/api/{{doctor}}/{{patient}}")
+                    .then((data) => {
+                    let patient = data.data.patient;
+                    $("#queue_position").html(patient.queuePosition); // note.
+                  })
+                  .catch((err) => {
+                    console.log(err);
+                  });
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
       });
 </script>
-{{/with}}
