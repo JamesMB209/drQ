@@ -3,16 +3,17 @@ const express = require("express");
 class ApiRouter {
     constructor(doctors) {
         this.doctors = doctors;
+        this.router();
     }
 
     router() {
         let router = express.Router();
-        router.get(`/:doctor/:patient`, this.get.bind(this));
+        router.get(`/:doctor/:patient`, this.getPatient.bind(this));
+        router.get(`/:doctor`, this.getDoctor.bind(this));
         return router;
     }
 
-    async get (req, res) {
-        console.log(req.params);
+    async getPatient (req, res) {
         try {
             let doctor = this.doctors[parseInt(req.params.doctor) - 1];
             console.log(doctor);
@@ -25,6 +26,14 @@ class ApiRouter {
         } catch (err) {
             console.log(err);
         }
+    }
+
+    getDoctor (req, res) {
+        let doctor = this.doctors[req.params.doctor -1];
+        res.send({
+            doctor:doctor,
+            queueLength:doctor.length(),
+        })
     }
 }
 

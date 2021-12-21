@@ -1,21 +1,51 @@
-{{#with doctor}}
-<p>doctor: {{fName}}</p>
-<p>doctor: {{lName}}</p>
-<p>doctor: {{fullName}}</p>
-<p>doctor id: {{id}}</p>
-<p>doctor queue: {{queue}}</p>
+<p id="fName"></p>
+<p id="lName"></p>
+<p id="fullName"></p>
+<p id="queueLength"></p>
 <button id="next">next</button>
 
 
 <script>
       $(() => {
-        let socket = io.connect("http://localhost:8000");
-        socket.emit("start", "{{id}}");
+        //on first page load insert data
+        axios
+            .get("/api/{{doctor}}")
+            .then((response) => {
+              let doctor = response.data.doctor;
+              $("#fName").html(doctor.fName);
+              $("#lName").html(doctor.lName);
+              $("#fullName").html(doctor.fullName);
+              $("#queueLength").html(response.data.queueLength);
 
-        $("#next").on("click", () => {
-          socket.emit("next", {{id}});
-          console.log("next patient");
-        });
+              //Set up socket connection
+              let socket = io.connect("http://localhost:8000");
+              socket.emit("start", `${doctor.id}`);
+
+              $("#next").on("click", () => {
+                socket.emit("next", doctor.id);
+                console.log("next patient" + doctor.id);
+              });
+              
+              //set up listners
+              socket.on("newPatient", () => {
+                  console.log("updating patient info");
+                  
+                  axios
+                    .get("/api/{{doctor}}")
+                    .then((response) => {
+                      let doctor = response.data.doctor;
+                      $("#queueLength").html(response.data.queueLength);
+                    })
+                    .catch((err) => {
+                      console.log(err);
+                    });
+              });
+            })
+            .catch((err) => {
+              console.log(err);
+            });
+        //let socket = io.connect("http://localhost:8000");
+        //socket.emit("start", "{{id}}");
+
       });
     </script>
-{{/with}}
