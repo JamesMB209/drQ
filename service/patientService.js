@@ -10,6 +10,11 @@ class Patient {
 	this.queuePosition;
 	this.arrived = new Date;
 	this.departed = "";
+
+	//pris added
+	this.hkid = patient.hkid;
+	this.dob = patient.dob;
+	this.gender = patient.gender;
 	}
 
 	//index in queue (can be some logic in here to calculate and return average waiting time)
