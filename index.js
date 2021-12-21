@@ -10,6 +10,7 @@ const DoctorRouter = require("./router/doctorRouter");
 const Patient = require("./service/patientService");
 const PatientRouter = require("./router/patientRouter.js");
 const ApiRouter = require("./router/apiRouter");
+const ReceptionRouter = require("./router/receptionRouter")
 
 var app = express();
 const http = require("http").Server(app);
@@ -93,7 +94,15 @@ async function main() {
         res.redirect(302, `/queue/${doctor.id}/${patientURL}`) //not sanatised.
     })
 
+    // app.get("/reception", (req, res) => {
+    //     console.log(doctors)
+    //     res.render("admin", {
+    //         doctor: doctors,
+    //     })
+    // })
     const apiRouter = new ApiRouter(doctors);
     app.use("/api", apiRouter.router());
+    const receptionRouter = new ReceptionRouter(doctors);
+    app.use("/reception", receptionRouter.router());
 }
 main();
