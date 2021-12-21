@@ -1,63 +1,54 @@
-<p>this is the form they use to enter their details, it will post to the doctor
-  that they are joining the queue off</p>
+<p class="m-5">Please fill in the required information, our doctors will see you as soon as possible.</p>
 
-{{!-- 
-send vars in this format.
+<form action="/checkin" method="post" class="m-5 patient_form">
 
-patient.
-  fName
-  lName
-  temperature
-  doctor 
-  HKID
-    
-  --}}
-
-
-<form action="/patient" method="post">
   <label>choose a doctor:</label>
   <ul>
     {{#each doctor}}
-
-      <input type="radio" name="doctorId" value="{{id}}"> Dr {{f_name}} {{l_name}} <br>
+      <input type="radio" name="doctor" value="{{id}}"> Dr {{fName}} {{lName}} (Room {{room}}) <br>
     {{/each}}
   </ul>
 
-  <br>
-  <label for="patientName">Name</label><br>
-  <input name="patientName" placeholder="name" value="" /> <br>
+  <label for="fName">First Name</label><br />
+  <input name="fName" placeholder="first name" value="" type="text"/>
+  <br />
 
-<!--
+  <label for="lName">Last Name</label><br />
+  <input name="lName" placeholder="last name" value="" type="text"/>
+  <br />
 
-<label for="temperature">Temperature</label><br>
-  <input name="temperature" value="" placeholder="celsius" /> 
+  <label for="hkid">HKID Number</label><br />
+  <input name="hkid" placeholder="A1234567" value="" />
+  <br />
+
+    <label for="dob">Date of Birth</label><br />
+  <input name="dob" placeholder="02/02/1990" value="" type="date"/>
+  <br />
+
+    <label for="gender">Gender</label><br />
+    <input name="gender" id="gender" value="Female" type="checkbox"/>
+    <label for="gender">Female</label>
+    <input name="gender" id="gender" value="Male" type="checkbox"/>
+    <label for="gender">Male</label>
+    <input name="gender" id="gender" value="Other" type="checkbox"/>
+    <label for="gender">Other</label>
+  <br />
+
+  <label for="temperature">Temperature °C</label><br />
+  <input type="number" name="temperature" value=""  min="35.0" max="43.0">
   
-  <li value="{{id}}">Doctor: {{f_name}} {{l_name}} in room {{room}}</li>
-  -->
-
-  <label for="f_name">First Name</label><br />
-  <input name="fName" placeholder="first name" value="" />
   <br />
-
-  <label for="l_name">Last Name</label><br />
-  <input name="lName" placeholder="first name" value="" />
-  <br />
-
-  <label for="doctor">Select a doctor</label>
-  <br />
-
-  <select id="" name="doctor">
-    {{#each doctor}}
-      <option value="{{id}}">Doctor:{{fName}}{{lName}} inroom {{room}}</option>
-    {{/each}}
-  </select>
-  <br />
-
-  <label for="temperature">Temperature</label><br />
-  <input name="temperature" value="" placeholder="celsius" />
-
-
-  <br />
-  <button type="submit" value="checkIn">check in </button>
+  <button type="submit" value="checkIn" class="my-4">check in </button>
 
 </form>
+
+{{!-- styling --}}
+<section id="checkin">
+<div class="container">
+    <div class="patient_img text-center"> <img src="./asset/4.png" alt="" width="50%" >
+      <div class="patient_rec text-center col-12">
+    </div>
+  </div>
+</div>
+</section>
+

@@ -7,9 +7,9 @@
 
 /*nav bar*/
 .nav_home {
-width: 66px;
-height: 70px;
-background: #00C4CC;
+    width: 66px;
+    height: 70px;
+    background: #00C4CC;
 }
 
 .nav-link {
@@ -22,3 +22,31 @@ background: #00C4CC;
 }
 
 /*footer*/
+
+
+
+
+/*patient check in*/
+
+ #checkin .container {
+    display: flex;
+    justify-content: center;
+}
+ 
+.patient_form {
+    border: 1px solid #007075;
+    border-radius: 10px;
+    padding: 20px;
+    line-height: 2em;
+    letter-spacing: 1px;
+}
+
+.patient_rec {
+    margin-bottom: 10%;
+    width: 80vw;
+    height: 4vh;
+    background: #007075;
+    border-radius: 20px;
+    margin-top: -16%;
+}
+

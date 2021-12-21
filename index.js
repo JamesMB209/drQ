@@ -6,11 +6,12 @@ const knexFile = require('./knexfile.js').development;
 const knex = require('knex')(knexFile);
 const axios = require('axios')
 const Doctor = require("./service/doctorService");
-const DoctorRouter = require("./router/doctorRouter");
 const Patient = require("./service/patientService");
-const PatientRouter = require("./router/patientRouter.js");
 const ApiRouter = require("./router/apiRouter");
 const ReceptionRouter = require("./router/receptionRouter")
+const CheckinRouter = require("./router/checkinRouter");
+const DoctorRouter = require("./router/doctorRouter");
+const PatientRouter = require("./router/patientRouter.js");
 
 var app = express();
 const http = require("http").Server(app);
@@ -36,7 +37,11 @@ async function main() {
     db_doctor.forEach((row) => {
         doctors.push(new Doctor(row));
     })
-
+    
+    // set up routers dependent on our doctor objects.
+    const checkinRouter = new CheckinRouter(doctors);
+    const apiRouter = new ApiRouter(doctors);
+    
     // Set up Socket IO
     io.on("connection", (socket) => {
         socket.on("start", (data) => {
@@ -54,13 +59,18 @@ async function main() {
 
             io.to(doctor.room).emit("update")
         })
+
+        socket.on("newPatient", (data) => {
+            let doctor = doctors[data - 1];
+            io.to(doctor.room).emit("newPatient")
+        })
     });
 
     // Set up routes
     // Doctor dashboard -- needs auth
     app.get("/doctor/:id", (req, res) => {
         res.render("doctor", {
-            doctor: doctors[parseInt(req.params.id) - 1],
+            doctor: req.params.id
         });
     });
     
@@ -72,35 +82,7 @@ async function main() {
                 })
     });
 
-    // Patient checkin point.
-    app.get("/checkin", (req, res) => {
-        res.render("patientCheckIn", {
-            doctor: doctors,
-        });
-    });
-    
-    //route to create new patient
-    app.post("/patient", (req, res) => {
-        let doctor = doctors[parseInt(req.body.doctor) - 1];
-        //#######Code Me########
-        // Need to sanitise input.
-        // If valid create new patient.
-        // Add this paitent to the doctors queue.
-        doctor.addToQueue(new Patient(req.body));
-        console.log("a new patient was created");
-        
-        //redirect to paitent dashboard "/queue/:doctor/:patient"
-        let patientURL = `${req.body.fName}_${req.body.lName}`.toLowerCase();
-        res.redirect(302, `/queue/${doctor.id}/${patientURL}`) //not sanatised.
-    })
-
-    // app.get("/reception", (req, res) => {
-    //     console.log(doctors)
-    //     res.render("admin", {
-    //         doctor: doctors,
-    //     })
-    // })
-    const apiRouter = new ApiRouter(doctors);
+    app.use("/checkin", checkinRouter.router());
     app.use("/api", apiRouter.router());
     const receptionRouter = new ReceptionRouter(doctors);
     app.use("/reception", receptionRouter.router());

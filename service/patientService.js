@@ -4,6 +4,9 @@ class Patient {
 	this.lName = patient.lName;
 	this.temperature = patient.temperature 
 	this.assignedDoctor = patient.doctor;
+	this.hkid = patient.hkid;
+	this.dob = patient.dob;
+	this.gender = patient.gender;
 
 	this.fullName = `${this.fName} ${this.lName}`;
 	this.url = `${this.fName}_${this.lName}`.toLowerCase();
