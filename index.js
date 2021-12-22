@@ -32,16 +32,16 @@ async function main() {
     // Load doctors from db.
     let doctors = [];
     let db_doctor = await knex("doctor")
-    .select("id", "f_name", "l_name", "room")
-    
+        .select("id", "f_name", "l_name", "room")
+
     db_doctor.forEach((row) => {
         doctors.push(new Doctor(row));
     })
-    
+
     // set up routers dependent on our doctor objects.
     const checkinRouter = new CheckinRouter(doctors);
     const apiRouter = new ApiRouter(doctors);
-    
+
     // Set up Socket IO
     io.on("connection", (socket) => {
         socket.on("start", (data) => {
@@ -52,17 +52,31 @@ async function main() {
 
         socket.on("next", (data) => {
             let doctor = doctors[data - 1];
-
             console.log(`${doctor.fullName} is asking for the next patient`);
+
             //logic for what happens on a doctor pressing "next".
             doctor.next()
 
-            io.to(doctor.room).emit("update")
+            io.to(doctor.room).emit("updatePatient")
         })
 
         socket.on("newPatient", (data) => {
             let doctor = doctors[data - 1];
-            io.to(doctor.room).emit("newPatient")
+            console.log("new patient added.")
+            io.to(doctor.room).emit("updatePatient")
+            io.to(doctor.room).emit("updateDoctor")
+        })
+
+        socket.on("updatePatient", (data) => {
+            let doctor = doctors[data - 1];
+            console.log("updating all patients.")
+            io.to(doctor.room).emit("updatePatient")
+        })
+
+        socket.on("updateDoctor", (data) => {
+            let doctor = doctors[data - 1];
+            console.log(doctor.fName + " is updating.")
+            io.to(doctor.room).emit("updateDoctor")
         })
     });
 
@@ -70,21 +84,44 @@ async function main() {
     // Doctor dashboard -- needs auth
     app.get("/doctor/:id", (req, res) => {
         res.render("doctor", {
-            doctor: req.params.id
+            doctor: req.params.id,
+            socket: "http://localhost:8000"
         });
     });
-    
+
     // Patient dashboard.
     app.get("/queue/:doctor/:patient", async (req, res) => {
         res.render("patient", {
-                    patient: req.params.patient,
-                    doctor: req.params.doctor
-                })
+            patient: req.params.patient,
+            doctor: req.params.doctor,
+            socket: "http://localhost:8000"
+        })
     });
 
     app.use("/checkin", checkinRouter.router());
     app.use("/api", apiRouter.router());
     const receptionRouter = new ReceptionRouter(doctors);
     app.use("/reception", receptionRouter.router());
+
+
+
+    // this code inputs some testing data for everyones styling.
+    axios
+    .get("https://randomuser.me/api/?results=50")
+    .then((response) => {
+        for (i of response.data.results) {
+            let docID = Math.floor(Math.random() * doctors.length); 
+            doctors[docID].addToQueue(new Patient({
+                fName:i.name.first,
+                lName:i.name.last,
+                temperature:Math.floor(Math.random()*3)+36,
+                hkid:i.location.postcode + "00",
+                dob:i.dob.date,
+                gender:i.gender,
+            }));
+            console.log(`localhost:http://localhost:8000/queue/${docID +1}/${i.name.first}_${i.name.last}`)
+        }
+    })
 }
 main();
+

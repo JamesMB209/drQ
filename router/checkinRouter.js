@@ -29,7 +29,6 @@ class CheckinRouter {
         // // If valid create new patient.
         // // Add this paitent to the doctors queue.
         doctor.addToQueue(new Patient(req.body));
-        console.log("a new patient was created");
 
         // // redirect to paitent dashboard "/queue/:doctor/:patient"
         let patientURL = `${req.body.fName}_${req.body.lName}`.toLowerCase();
