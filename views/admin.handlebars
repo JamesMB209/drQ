@@ -1,7 +1,10 @@
 <h3>Control Page</h3>
+
+<div class="row">
     {{#each doctor}}
-        <div id="docNames">Dr. {{fullName}}</div>
-        {{#each queue}}
-            <div id="patientDetails">{{patient.id_card}}</div>
-        {{/each}}
+        <div class="col-4">
+            <div class="docNames">Dr. {{fullName}}: {{#each queue}}{{fName}}, {{/each}}</div>
+        {{!-- {{#each queue}}<button>Move to the top</button>{{id}}{{/each}} --}}
+        </div>
     {{/each}}
+</div>
