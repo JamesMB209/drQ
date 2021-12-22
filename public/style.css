@@ -4,6 +4,11 @@
     font-family:  'Roboto', sans-serif;
 }
 
+.reset {
+    background-color: white;
+    color: #007075;
+}
+
 
 /*nav bar*/
 .nav_home {
@@ -42,11 +47,17 @@
 }
 
 .patient_rec {
-    margin-bottom: 10%;
+    /* margin-bottom: 10%; */
     width: 80vw;
-    height: 4vh;
+    height: 5vh;
     background: #007075;
     border-radius: 20px;
-    margin-top: -16%;
+    /* margin-top: -16%; */
+    margin: -17% auto 10%;
 }
 
+button {
+    background-color: #007075;
+    color: white;
+    border-radius: 10%;
+}
