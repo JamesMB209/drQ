@@ -31,16 +31,16 @@ async function main() {
     // Load doctors from db.
     let doctors = [];
     let db_doctor = await knex("doctor")
-    .select("id", "f_name", "l_name", "room")
-    
+        .select("id", "f_name", "l_name", "room")
+
     db_doctor.forEach((row) => {
         doctors.push(new Doctor(row));
     })
-    
+
     // set up routers dependent on our doctor objects.
     const checkinRouter = new CheckinRouter(doctors);
     const apiRouter = new ApiRouter(doctors);
-    
+
     // Set up Socket IO
     io.on("connection", (socket) => {
         socket.on("start", (data) => {
@@ -52,7 +52,7 @@ async function main() {
         socket.on("next", (data) => {
             let doctor = doctors[data - 1];
             console.log(`${doctor.fullName} is asking for the next patient`);
-            
+
             //logic for what happens on a doctor pressing "next".
             doctor.next()
 
@@ -87,17 +87,38 @@ async function main() {
             socket: "http://localhost:8000"
         });
     });
-    
+
     // Patient dashboard.
     app.get("/queue/:doctor/:patient", async (req, res) => {
         res.render("patient", {
-                    patient: req.params.patient,
-                    doctor: req.params.doctor,
-                    socket: "http://localhost:8000"
-                })
+            patient: req.params.patient,
+            doctor: req.params.doctor,
+            socket: "http://localhost:8000"
+        })
     });
 
     app.use("/checkin", checkinRouter.router());
     app.use("/api", apiRouter.router());
+
+
+
+    // this code inputs some testing data for everyones styling.
+    axios
+    .get("https://randomuser.me/api/?results=50")
+    .then((response) => {
+        for (i of response.data.results) {
+            let docID = Math.floor(Math.random() * doctors.length); 
+            doctors[docID].addToQueue(new Patient({
+                fName:i.name.first,
+                lName:i.name.last,
+                temperature:Math.floor(Math.random()*3)+36,
+                hkid:i.location.postcode + "00",
+                dob:i.dob.date,
+                gender:i.gender,
+            }));
+            console.log(`localhost:http://localhost:8000/queue/${docID +1}/${i.name.first}_${i.name.last}`)
+        }
+    })
 }
 main();
+
