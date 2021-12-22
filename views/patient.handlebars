@@ -1,41 +1,37 @@
+<div id="displayBox">
 <p id="fName"></p>
 <p id="lName"></p>
 <p id="fullName"></p>
 <p id="queue_position"></p>
-
+</div>
 
 <script>
       $(() => {
-        //on first page load insert data
-        axios
-            .get("/api/{{doctor}}/{{patient}}")
-            .then((data) => {
-              let patient = data.data.patient;
+        //Set up socket connection
+        let socket = io.connect("{{socket}}");
+        socket.emit("start", {{doctor}});
+        
+        //setup listners 
+        socket.on("updatePatient", () => {
+          axios
+          .get("/api/{{doctor}}/{{patient}}")
+          .then((data) => {
+            let patient = data.data.patient;
+            if(patient.queuePosition !== 0) { 
               $("#fName").html(patient.fName);
               $("#lName").html(patient.lName);
               $("#fullName").html(patient.fullName);
               $("#queue_position").html(patient.queuePosition);
+            } else {
+              $("#displayBox").html("you kno de wai.")
+            }
+          })
+          .catch((err) => {
+            console.log("no patient found");
+          });
+        });
 
-              //Set up socket connection
-              let socket = io.connect("http://localhost:8000");
-              socket.emit("start", `${patient.assignedDoctor}`);
-              socket.emit("newPatient", patient.assignedDoctor)
-              socket.on("update", () => {
-                  console.log("updating");
-                  
-                  axios
-                    .get("/api/{{doctor}}/{{patient}}")
-                    .then((data) => {
-                    let patient = data.data.patient;
-                    $("#queue_position").html(patient.queuePosition); // note.
-                  })
-                  .catch((err) => {
-                    console.log(err);
-                  });
-              });
-            })
-            .catch((err) => {
-              console.log(err);
-            });
+        //emit a new patient to display the patient in the system and force the data for this patient to load once.
+        socket.emit("newPatient", {{doctor}});
       });
 </script>

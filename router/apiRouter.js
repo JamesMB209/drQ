@@ -13,26 +13,24 @@ class ApiRouter {
         return router;
     }
 
-    async getPatient (req, res) {
+    async getPatient(req, res) {
         try {
             let doctor = this.doctors[parseInt(req.params.doctor) - 1];
-            console.log(doctor);
             doctor.patient(req.params.patient).then((patient) => {
-            console.log(patient.queuePosition)
-            res.send({
-                patient:patient
-            })
-        });
+                res.send({
+                    patient: patient
+                })
+            });
         } catch (err) {
             console.log(err);
         }
     }
 
-    getDoctor (req, res) {
-        let doctor = this.doctors[req.params.doctor -1];
+    getDoctor(req, res) {
+        let doctor = this.doctors[req.params.doctor - 1];
         res.send({
-            doctor:doctor,
-            queueLength:doctor.length(),
+            doctor: doctor,
+            queueLength: doctor.length(),
         })
     }
 }

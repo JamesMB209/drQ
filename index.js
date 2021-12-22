@@ -51,17 +51,31 @@ async function main() {
 
         socket.on("next", (data) => {
             let doctor = doctors[data - 1];
-
             console.log(`${doctor.fullName} is asking for the next patient`);
+            
             //logic for what happens on a doctor pressing "next".
             doctor.next()
 
-            io.to(doctor.room).emit("update")
+            io.to(doctor.room).emit("updatePatient")
         })
 
         socket.on("newPatient", (data) => {
             let doctor = doctors[data - 1];
-            io.to(doctor.room).emit("newPatient")
+            console.log("new patient added.")
+            io.to(doctor.room).emit("updatePatient")
+            io.to(doctor.room).emit("updateDoctor")
+        })
+
+        socket.on("updatePatient", (data) => {
+            let doctor = doctors[data - 1];
+            console.log("updating all patients.")
+            io.to(doctor.room).emit("updatePatient")
+        })
+
+        socket.on("updateDoctor", (data) => {
+            let doctor = doctors[data - 1];
+            console.log(doctor.fName + " is updating.")
+            io.to(doctor.room).emit("updateDoctor")
         })
     });
 
@@ -69,7 +83,8 @@ async function main() {
     // Doctor dashboard -- needs auth
     app.get("/doctor/:id", (req, res) => {
         res.render("doctor", {
-            doctor: req.params.id
+            doctor: req.params.id,
+            socket: "http://localhost:8000"
         });
     });
     
@@ -77,7 +92,8 @@ async function main() {
     app.get("/queue/:doctor/:patient", async (req, res) => {
         res.render("patient", {
                     patient: req.params.patient,
-                    doctor: req.params.doctor
+                    doctor: req.params.doctor,
+                    socket: "http://localhost:8000"
                 })
     });
 
