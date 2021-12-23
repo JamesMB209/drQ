@@ -4,11 +4,12 @@ class Doctor {
 		this.fName = doctor.f_name;
 		this.lName = doctor.l_name;
 		this.room = doctor.room;
-		// this.knex = knex;
+		this.knex = knex;
 
 		this.fullName = `${doctor.f_name} ${doctor.l_name}`;
 		this.queue = [];
 	}
+
 	patient(url) {
 		return new Promise((res, rej) => {
 			url = url.toLowerCase();
@@ -21,47 +22,72 @@ class Doctor {
 	}
 
 	addToQueue(patient) {
-		// if (this.id[0] !== undefined && this.id[0] == doctorId) {
-		// 	this.queue.push() // push new patient
-		// } res.redirect("/")
 		this.queue.push(patient);
 	}
 
 	next() {
-		// if (this.queue.length !== 0) {
-		// 	return this.queue[0]
-		// } res.end("No more patients waiting.")
 		this.queue.shift() // save to history 
 		this.queue.map(patient => patient.queuePosition--)
 	}
 
 	length() {
-		// if (this.id[0] !== undefined) {
-		// 	let length = this.queue.length
-		// 	return `Total number of patient: ${length}`
-		// }
 		return this.queue.length;
 	}
 
-	save(patientId, doctorId/*, updated_at*/) {
-		return this.knex("queue")
-			.insert({
-				patient_id: patientId,
-				doctor_id: doctorId,
-				checked_in: true
-			})
-			.then((result) => {
-				console.log(`Patients data saved successfully! New data: ${result}`)
-			})
+	move(patient, position = 1) {
+		patient = this.queue.find(patient => patient.hkid == patient);
+		let patientPos = this.queue.indexOf(patient => patient.hkid == patient);
+		this.queue.splice(patientPos, 1);
+		this.queue.splice(position, 0, patient);
 	}
 
-	list() {
-		return this.knex('queue')
-			.innerJoin('patient', 'queue.patient_id', 'patient.id')
-			.select('queue.id', 'queue.doctor_id', 'patient.f_name', 'patient.l_name')
-			.where('queue.doctor_id', this.id)
-			.orderBy('created_at', 'asc');
+	save(patientId, doctorId/*, updated_at*/) {
+		// code if the whole booking was completed, eg. when the person checks out 
+		// the code needs to check if this patient has visited before 
+		// if no, adds new patient details to the DB
+
+		// if yes/after adding. add the appointment details to the database
+		this.knex('patient')
+			.select("id")
+			.where('id_card', "B69420691")
+			.then((row) => {
+				if(row.length === 1) {
+					console.log("returning patient")
+
+				} else {
+					console.log("new patient")
+					this.knex('patient')
+					.insert({
+						f_name: "test fname",
+						l_name: "test lname",
+						id_card: "test"
+						dob:
+						//note:
+					})
+				}
+			})
+
+		// .exists(select)
+		// select exists(select 1 from patient where id_card = 'B6942069')		
+
+		// this.knex("queue")
+		// 	.insert({
+		// 		patient_id: patientId,
+		// 		doctor_id: doctorId,
+		// 		checked_in: true
+		// 	})
+		// 	.then((result) => {
+		// 		console.log(`Patients data saved successfully! New data: ${result}`)
+		// 	})
 	}
+
+	// list() {
+	// 	return this.knex('queue')
+	// 		.innerJoin('patient', 'queue.patient_id', 'patient.id')
+	// 		.select('queue.id', 'queue.doctor_id', 'patient.f_name', 'patient.l_name')
+	// 		.where('queue.doctor_id', this.id)
+	// 		.orderBy('created_at', 'asc');
+	// }
 
 }
 

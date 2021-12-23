@@ -24,6 +24,7 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 
 app.use(express.static('public'));
+
 http.listen(8000);
 console.log("App listening to port 8000")
 
@@ -34,7 +35,7 @@ async function main() {
         .select("id", "f_name", "l_name", "room")
 
     db_doctor.forEach((row) => {
-        doctors.push(new Doctor(row));
+        doctors.push(new Doctor(row, knex));
     })
 
     // set up routers dependent on our doctor objects.
@@ -104,7 +105,7 @@ async function main() {
 
     // this code inputs some testing data for everyones styling.
     axios
-    .get("https://randomuser.me/api/?results=50")
+    .get("https://randomuser.me/api/?results=5")
     .then((response) => {
         for (i of response.data.results) {
             let docID = Math.floor(Math.random() * doctors.length); 
@@ -117,6 +118,8 @@ async function main() {
                 gender:i.gender,
             }));
             console.log(`localhost:http://localhost:8000/queue/${docID +1}/${i.name.first}_${i.name.last}`)
+
+            doctors[docID].save(i.location.postcode+"00");
         }
     })
 }
