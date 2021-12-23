@@ -3,8 +3,29 @@
 <div class="row">
     {{#each doctor}}
         <div class="col-4">
-            <div class="docNames">Dr. {{fullName}}: {{#each queue}}{{fName}}, {{/each}}</div>
-        {{!-- {{#each queue}}<button>Move to the top</button>{{id}}{{/each}} --}}
+            <div class="docNames">Dr. {{fullName}}:</div><br />
+        {{#each queue}}<button class="moveButton" doctor="{{assignedDoctor}}" hkid="{{hkid}}">Move Up</button>{{fName}}<button class="deleteFromQueue" doctor="{{assignedDoctor}}" hkid="{{hkid}}">Delete</button><br>{{/each}}
         </div>
     {{/each}}
 </div>
+
+<script>
+    $(() => {
+        let socket = io.connect("{{socket}}")
+
+        $(".moveButton").on("click", (e) => {
+          socket.emit("moveUp", {
+              doctor: e.currentTarget.attributes.doctor.nodeValue,
+              hkid: e.currentTarget.attributes.hkid.nodeValue
+          })
+        });
+        $(".deleteFromQueue").on("click", (e) => {
+            socket.emit("removeQ", {
+                doctor: e.currentTarget.attributes.doctor.nodeValue,
+                hkid: e.currentTarget.attributes.hkid.nodeValue
+            })
+        })
+
+
+    })
+</script>

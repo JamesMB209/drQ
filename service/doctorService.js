@@ -4,7 +4,7 @@ class Doctor {
 		this.fName = doctor.f_name;
 		this.lName = doctor.l_name;
 		this.room = doctor.room;
-		// this.knex = knex;
+		this.knex = knex;
 
 		this.fullName = `${doctor.f_name} ${doctor.l_name}`;
 		this.queue = [];
@@ -28,27 +28,22 @@ class Doctor {
 	}
 
 	next() {
-		// if (this.queue.length !== 0) {
-		// 	return this.queue[0]
-		// } res.end("No more patients waiting.")
 		this.queue.shift() // save to history 
 		this.queue.map(patient => patient.queuePosition--)
 	}
 
 	length() {
-		// if (this.id[0] !== undefined) {
-		// 	let length = this.queue.length
-		// 	return `Total number of patient: ${length}`
-		// }
 		return this.queue.length;
 	}
 
-	save(patientId, doctorId/*, updated_at*/) {
+	save() {
 		return this.knex("queue")
 			.insert({
-				patient_id: patientId,
-				doctor_id: doctorId,
-				checked_in: true
+				// patient_id: this.queue.patient.assignedDoctor + 1,// doesnt work
+				patient_id: 1,
+				doctor_id: this.id,// doesnt work
+				checked_in: true, //purrfect
+				departure: new Date() //purrfect
 			})
 			.then((result) => {
 				console.log(`Patients data saved successfully! New data: ${result}`)
@@ -62,7 +57,30 @@ class Doctor {
 			.where('queue.doctor_id', this.id)
 			.orderBy('created_at', 'asc');
 	}
-
+	// Admin superpowers ---- update Que and remove from Que
+	move(hkid, position=1) {
+        let patient = this.queue.find(patient => patient.hkid == hkid);
+		console.log(`Patient:::::::::: ${patient}`)
+        let patientPos = this.queue.findIndex(patient => patient.hkid == hkid);
+		console.log(patientPos)
+		console.log(this.queue[0], this.queue[1]);
+		if (patientPos > 1) { // --> fixes bugs
+			console.log(hkid);
+			console.log("cluclucluclu" + patient);
+			this.queue.splice(patientPos, 1);
+			this.queue.splice(position, 0, patient);
+		} else {
+			return
+		}
+    }
+	
+	remove(hkid) {
+		let patient = this.queue.find(patient => patient.hkid == hkid);
+		console.log(`Wee WEE a ${patient}`)
+		let patientPos = this.queue.findIndex(patient => patient.hkid == hkid);
+		console.log(`Hi I'm Poppy.....${patientPos}`)
+		this.queue.splice(patientPos, 1);
+	}
 }
 
 module.exports = Doctor;

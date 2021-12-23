@@ -17,6 +17,7 @@ class Reception {
     get(req, res) {
             res.render("admin", {
                 doctor: this.doctors,
+                socket: "http://localhost:8000"
             })
     }
 
