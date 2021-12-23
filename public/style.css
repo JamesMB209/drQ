@@ -9,6 +9,23 @@
     color: #007075;
 }
 
+.page_name {
+    width: 50vw;
+    height: 5vh;
+}
+
+h6 {
+    text-align: center;
+    color: white;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding-top: 15px ;
+}
+
+label {
+    font-weight: 500;
+}
 
 /*nav bar*/
 .nav_home {
@@ -27,8 +44,6 @@
 }
 
 /*footer*/
-
-
 
 
 /*patient check in*/
@@ -59,5 +74,56 @@
 button {
     background-color: #007075;
     color: white;
-    border-radius: 10%;
+    border-radius: 10px;
+}
+
+/*doctor access*/
+.doc_info {
+    color: #AA8F00;
+}
+
+.current_patient {
+    border: 1px solid #007075;
+    border-radius: 40px;
+    padding-right: 100px;
+}
+
+.patient_queue {
+    border: 1px solid #007075;
+    border-radius: 40px;
+    margin-right: 20px;
+}
+
+#doctor p {
+    font-weight: 500;
+}
+
+#doctor span {
+    font-weight: 300;
+}
+
+.doctor_rec {
+    width: 80vw;
+    height: 5vh;
+    background: #AA8F00;
+    border-radius: 20px;
+    margin: -50px auto 5%;
+}
+
+.doctor_image img {
+    position:relative;
+    margin-left: 10%;
+}
+
+#doctor .container{
+    min-height: 40vh;
+}
+
+.next_btn {
+    
+    width: 200px;
+    height: 80px;
+    background-color: #AA8F00;
+    font-size: 20px;
+    
 }

@@ -13,9 +13,12 @@ class Patient {
 	this.queuePosition;
 	this.arrived = new Date;
 	this.departed = "";
+	//this.visitReason = patient.visitReason;
+	//this.history = patient.history;
 	}
-
+	
 	//index in queue (can be some logic in here to calculate and return average waiting time)
 }
+
 
 module.exports = Patient;

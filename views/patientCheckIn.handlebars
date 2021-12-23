@@ -1,11 +1,18 @@
-<p class="m-5">Please fill in the required information, our doctors will see you as soon as possible.</p>
+<div class="page_name" style="background-color: #00c4cc;">
+<h6 class="">Patient Check-in Form</h6>
+
+</div>
+
+
+
+<p class="m-3">Please fill in the required information, our doctors will see you as soon as possible.</p>
 
 <form action="/checkin" method="post" class="m-5 patient_form">
 
   <label>choose a doctor:</label>
   <ul>
     {{#each doctor}}
-      <input type="radio" name="doctor" value="{{id}}"> Dr {{fName}} {{lName}} (Room {{room}}) <br>
+      <input type="radio" name="doctor" value="{{id}}"> Dr {{fName}} {{lName}} <br>(Room {{room}}) <br>
     {{/each}}
   </ul>
 
@@ -17,8 +24,8 @@
   <input name="lName" placeholder="last name" value="" type="text"/>
   <br />
 
-  <label for="hkid">HKID Number</label><br />
-  <input name="hkid" placeholder="A1234567" value="" />
+  <label for="hkid">HKID Number <span style="color: gray;">ex. A1234567 </span></label><br />
+  <input name="hkid" placeholder="A1234567" value="" pattern="[^()/><\][\\\x22,;|]+" />
   <br />
 
     <label for="dob">Date of Birth</label><br />
@@ -26,12 +33,12 @@
   <br />
 
     <label for="gender">Gender</label><br />
-    <input name="gender" id="gender" value="Female" type="checkbox"/>
+    <input name="gender" id="gender" value="Female" type="radio"/>
     <label for="gender">Female</label>
-    <input name="gender" id="gender" value="Male" type="checkbox"/>
+    <input name="gender" id="gender" value="Male" type="radio"/>
     <label for="gender">Male</label>
-    <input name="gender" id="gender" value="Other" type="checkbox"/>
-    <label for="gender">Other</label>
+    <input name="gender" id="gender" value="Other" type="radio"/>
+    <label for="gender">Let me type<input type="text" name="other_gender" /></label>
   <br />
 
   <label for="temperature">Temperature °C</label><br />
