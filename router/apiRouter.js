@@ -10,6 +10,7 @@ class ApiRouter {
         let router = express.Router();
         router.get(`/:doctor/:patient`, this.getPatient.bind(this));
         router.get(`/:doctor`, this.getDoctor.bind(this));
+        router.get(`/main`, this.getAll.bind(this));
         return router;
     }
 
@@ -32,6 +33,10 @@ class ApiRouter {
             doctor: doctor,
             queueLength: doctor.length(),
         })
+    }
+
+    getAll(req, res) {
+        console.log(`This is this.doctors: ${this.doctors}`)
     }
 }
 
