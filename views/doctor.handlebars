@@ -1,7 +1,5 @@
-
-
-<div class="page_name col-10" style="background-color: #AA8F00;">
-<h6 class="">Doctor Access</h6>
+<div class="page_name col-10" style="background-color: #AA8F00">
+<h6>Doctor Access</h6>
 </div>
 
 <section id="doctor">
@@ -22,7 +20,9 @@
       <p>Age: <span id="patientAge"></span></p>
       <p>Visit Reason: <span id="patientVisitReason"></span></p>
       <p>History: <span id="patientHistory"></span></p>
+      <p>Arrived time: <span id="patientArrived"></span></p>
     </div>
+    
 
     <div class="col-2">
 
@@ -79,11 +79,28 @@
             $("#queueLength").html(response.data.queueLength);
             $("#patientFullName").html(doctor.queue[0].fullName);
             $("#patientGender").html(doctor.queue[0].gender);
-            $("#patientDob").html(doctor.queue[0].dob);
-           //$("#patientAge").html(doctor.queue[0].calAge);
+
+            $("#patientAge").html(new Date().getFullYear() - new Date(doctor.queue[0].dob).getFullYear());
+
+            $("#patientDob").html(new Date(doctor.queue[0].dob).toLocaleDateString());
+
+             $("#patientArrived").html(new Date(doctor.queue[0].arrived).toLocaleString());
+
             $("#patientVisitReason").html(doctor.queue[0].visitReason);
             $("#patientHistory").html(doctor.queue[0].history);
 
+            // process date and DOB before adding ot html
+            // 
+
+            /*console.log("Patient Age: " +doctor.queue[0].patientAge);
+            console.log("Arrived: " + doctor.queue[0].arrived);
+           
+            console.log(doctor.queue[0].fullName);
+            console.log(doctor.queue[0].hkid);
+            console.log("AGE!!!!", new Date().getFullYear() - new Date(doctor.queue[0].dob).getFullYear() );
+		        console.log("Current year", ); */
+
+      
           })
           .catch((err) => {
             console.log(err);
