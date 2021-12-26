@@ -1,9 +1,9 @@
 <div class="page_name col-10" style="background-color: #AA8F00">
-<h6>Doctor Access</h6>
+<h5>Doctor Access</h5>
 </div>
 
 <section id="doctor">
-<div class="col-12 m-5 doc_info">
+<div class="m-5 doc_info">
 <p> Doctor: <span id="fullName"></span></p>
 <p> Room: <span id="room"></span></p>
 </div>
@@ -11,48 +11,40 @@
 
 <!--current patient info-->
 <div class="container">
-  <div class="row">
-    <div class="col-6 current_patient p-4 m-1">
-      <h4 class="pb-5" style="color: #007075;">Current Patient Info</h4>
+  
+    <div class="current_patient p-4 m-3">
+      <h4 class="pb-5" style="color: #AA8F00;">Current Patient</h4>
       <p>Name: <span id="patientFullName"></span></p>
       <p>Gender: <span id="patientGender"></span></p>
-      <p>Date of birth: <span id="patientDob"></span></p>
       <p>Age: <span id="patientAge"></span></p>
+      <p>Date of birth: <span id="patientDob"></span></p>
       <p>Visit Reason: <span id="patientVisitReason"></span></p>
       <p>History: <span id="patientHistory"></span></p>
       <p>Arrived time: <span id="patientArrived"></span></p>
     </div>
-    
-
-    <div class="col-2">
-
-    </div>
 
 
 <!--Patient in queue-->
-  <div class="patient_queue col-3 p-4 text-center pt-5">
-    <h4 class="pb-5" style="color: #007075;"> Patient(s) in queue:</h4>
+  <div class="patient_queue p-4 text-center pt-5 m-3">
+    <h4 class="pb-5" style="color: #AA8F00;"> Patient(s) in queue:</h4>
     <h2 id="queueLength"></h2>
   </div>
-</div>
-</div>
-
-<div class="row">
-  <div class="col-8 col-md-8"></div>
-<button id="next" class="next_btn m-5 col-4 col-md-4">NEXT PATIENT</button>
 
 </div>
 
-<!--bottom image-->
 
-    <div class="doctor_image mt-5"> <img src="/asset/11.png" alt="doctor" width="10%" >
-      <div class="doctor_rec text-center col-12">
-    </div>
-  </div>
-  
+  <div class="btn_area">
+<button id="next" class="next_btn">NEXT PATIENT</button>
+</div>
 
 </section>
 
+<!--bottom image-->
+
+    <div class="doctor_image mt-3"> <img src="/asset/11.png" alt="doctor" >
+      <div class="doctor_rec text-center">
+    </div>
+  </div>
 
 <script>
       $(() => {

@@ -24,6 +24,14 @@ app.set("views", viewsPath);
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 
+//pris added index for handlebars
+const Handlebars = require("handlebars");
+Handlebars.registerHelper("inc", function(value, options)
+{
+    return parseInt(value) + 1;
+});
+//end pris added index for handlebars
+
 app.use(express.static('public'));
 http.listen(8000);
 console.log("App listening to port 8000")
@@ -122,7 +130,23 @@ async function main() {
     const receptionRouter = new ReceptionRouter(doctors);
     app.use("/reception", receptionRouter.router());
 
+     //25/12 pris added render login and signup
+     app.get("/", (req, res) => {
+        res.render("login")
+    })
+     
+     app.get("/login", (req, res) => {
+         res.render("login")
+     }) 
 
+     app.get("/signup", (req, res) => {
+        res.render("signup")
+    })
+
+    //25/12 pris added 404 page render
+    app.all('*', (req, res) => {
+        res.status(404).render('error');
+    })
 
     // this code inputs some testing data for everyones styling.
     axios

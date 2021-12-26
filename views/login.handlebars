@@ -1,32 +1,40 @@
 {{!-- this will be the login page --}}
 
+<section id="login" class="flex row">
 
-
-<form action="/doctor/1" method="post">
+<div class="item col-6">
+  <div class="login_box">
+<form action="/doctor/1" method="post" >
+  <p>Please log in</p>
+  <hr>
     <label for="username">Username <br />
-    <input type="text" name="username" id="username">
+    <input type="text" name="username" id="username" placeholder=" username">
     </label>
     <br />
     <label for="password">Password <br />
-    <input type="password" name="password" id="password">
+    <input type="password" name="password" id="password" placeholder=" password">
     </label>
     <br />
-    <button type="submit">Log in</button>
+    <button type="submit" class="login_btn">LOGIN</button>
+    <p class="other_signin">sign in with <a href="#passport"> <img src="/asset/google_logo.png" alt="google" ></a></p>
+    <p class="signup"><a href="/signup"><i class="fas fa-user-plus" style="color: #00c4cc; font-size: 17px; padding: 5px"></i> sign up</a></p>
+    <p class="forgot"><a href="#forgot">forgot password?</a></p>
 </form>
+  </div>
+  </div>
 
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
-    <br />
+<div class="item login_img col-6">
+    <img src="/asset/login.png" alt="">
+</div>
+
+
+<div style="display: none;">
+   
     <p>YOU CAN NOW LOG IN</p>
-    <br />
-    <br />
-    <br />
     <h6><a href="/signup">Click me to register!</a></h6>
 
 <h1>HELLO IT IS FINALLY WORKING!</h1>
 <h1><strong>WOOT WOOT!!!!</strong></h1>
+</div>
+
+</section>

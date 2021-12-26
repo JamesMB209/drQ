@@ -14,7 +14,7 @@
     height: 5vh;
 }
 
-h6 {
+h5 {
     text-align: center;
     color: white;
     display: flex;
@@ -24,9 +24,37 @@ h6 {
 }
 
 label {
-    font-weight: 500;
+    font-weight: 400;
 }
 
+button {
+    background-color: #007075;
+    color: white;
+    border-radius: 10px;
+    width: 90px;
+}
+
+button:hover {
+    background: #00C4CC;
+    color: black;
+}
+
+input {
+    border: 1px solid #007075;
+    border-radius: 5px;
+    line-height: 2;
+}
+
+input[type=text], [type=password] {
+    width: 200px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+input:focus {
+    background-color: #00c5cc29;
+  }
+
+  /*==============================================================*/
 /*nav bar*/
 .nav_home {
     width: 66px;
@@ -44,8 +72,11 @@ label {
 }
 
 /*footer*/
+#footer a {
+    color: white;
+}
 
-
+/*==============================================================*/
 /*patient check in*/
 
  #checkin .container {
@@ -71,27 +102,33 @@ label {
     margin: -17% auto 10%;
 }
 
-button {
-    background-color: #007075;
-    color: white;
-    border-radius: 10px;
+textarea {
+    width: 50vw;
 }
 
+/*==============================================================*/
 /*doctor access*/
 .doc_info {
     color: #AA8F00;
 }
 
+#doctor .container{
+    display: flex;
+    flex-wrap: row wrap;
+    justify-content: center;
+    
+}
+
 .current_patient {
-    border: 1px solid #007075;
+    border: 1px solid #AA8F00;
     border-radius: 40px;
-    padding-right: 100px;
+    flex: 1;
 }
 
 .patient_queue {
-    border: 1px solid #007075;
+    border: 1px solid #AA8F00;
     border-radius: 40px;
-    margin-right: 20px;
+    flex: 0 200px;
 }
 
 #doctor p {
@@ -100,6 +137,22 @@ button {
 
 #doctor span {
     font-weight: 300;
+}
+
+.btn_area {
+    margin: 80px auto 80px 70vw;
+}
+
+.next_btn {
+    width: 200px;
+    height: 80px;
+    background-color: #AA8F00;
+    font-size: 20px;
+}
+
+.next_btn:hover {
+    background: #685700;
+    color: white;
 }
 
 .doctor_rec {
@@ -111,19 +164,146 @@ button {
 }
 
 .doctor_image img {
+    width: 15vw;
+    height: auto;
     position:relative;
     margin-left: 10%;
 }
 
-#doctor .container{
-    min-height: 40vh;
+/*==============================================================*/
+/* login page */
+
+#login.flex {
+    display: flex;
+    flex-direction: row; 
+    margin-bottom: 70px ;
 }
 
-.next_btn {
-    
-    width: 200px;
-    height: 80px;
-    background-color: #AA8F00;
-    font-size: 20px;
-    
+#login .item {
+    display: flex;
+    flex: 1;
+    margin: 30px;
+    justify-content: center;
+    align-items: center;
 }
+
+.login_box {
+    border: 1px solid #007075;
+    padding: 20px 80px;
+    border-radius: 20px;
+    box-sizing: border-box;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
+
+.login_btn {
+    width: 200px;
+    height: 40px;
+    font-weight: 300;
+    text-align: center;
+    border-style: none;
+    margin-top: 40px;
+    box-sizing: border-box;
+    letter-spacing: 1.2px;
+}
+
+#login p {
+    text-align: center;
+    color: #007075;
+}
+
+#login hr {
+    color: #00C4CC;
+    margin: -15px auto 40px auto;
+    height: 2px;
+    width: 100px;  
+}
+
+#login label {
+    color: #007075;
+    line-height: 30px;
+}
+
+.other_signin {
+    margin-top: 30px;
+}
+
+.other_signin img{
+    width: 20px; 
+    border-radius: 50%; 
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25); 
+    margin-left: 10px;
+}
+
+#login .forgot_password {
+    color: rgb(155, 154, 154);
+    margin-top: 40px;
+    margin-bottom: 1px;
+}
+
+.login_img img {
+    width: 45vh;
+    float: right;
+}
+
+#login .forgot a {
+    color: gray;
+    text-decoration: none;
+}
+
+#login .signup a {
+    color: #007075;
+    text-decoration: none;
+    font-weight: 500;
+}
+
+@media only screen and (max-width: 768px) {
+    /* For mobile phones: */
+    [class*="col-"] {
+      width: 100%;
+    }
+}
+
+/*==============================================================*/
+/* admin page */
+#admin h3 {
+    color: #007075;
+}
+
+#admin .moveButton {
+    background: white;
+    color: #007075;
+}
+
+#admin .deleteFromQueue {
+    background: white;
+    color: red;
+}
+
+.docNames {
+    color: #007075;
+}
+
+/* #admin .flex {
+    display: flex;
+    flex-direction: column;
+    flex-wrap: wrap;
+}
+
+#admin .item {
+    flex: 1;
+    margin: 10px;
+    display: flex;
+    
+} */
+
+
+.queue_list {
+   border: 1px solid #006f755f;
+   padding-bottom: 50px;
+}
+
+#admin span {
+    margin: 5px;
+    font-weight: 500;
+}
+
