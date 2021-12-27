@@ -47,14 +47,13 @@ class Doctor {
 		// if no, adds new patient details to the DB
 
 		// if yes/after adding. add the appointment details to the database
-		await this.knex('patient')
+		await this.knex('patient') //check if patient exists 
 			.select("id")
 			.where('id_card', "B69420691")
 			.then((row) => {
-				if(row.length === 1) {
-					console.log("returning patient")
-
-				} else {
+				if(row.length === 1) { // if yes.
+					console.log("returning patient");
+				} else { // if no
 					console.log("new patient")
 					this.knex('patient')
 					.insert({

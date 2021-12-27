@@ -8,6 +8,7 @@ const axios = require('axios')
 const Doctor = require("./service/doctorService");
 const Patient = require("./service/patientService");
 const ApiRouter = require("./router/apiRouter");
+const ReceptionRouter = require("./router/receptionRouter")
 const CheckinRouter = require("./router/checkinRouter");
 const DoctorRouter = require("./router/doctorRouter");
 const PatientRouter = require("./router/patientRouter.js");
@@ -22,6 +23,14 @@ app.set("view engine", "handlebars");
 app.set("views", viewsPath);
 app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
+
+//pris added index for handlebars
+const Handlebars = require("handlebars");
+Handlebars.registerHelper("inc", function(value, options)
+{
+    return parseInt(value) + 1;
+});
+//end pris added index for handlebars
 
 app.use(express.static('public'));
 
@@ -45,8 +54,10 @@ async function main() {
     // Set up Socket IO
     io.on("connection", (socket) => {
         socket.on("start", (data) => {
+            console.log(`Go skrtskrt:11111 ${data}`)
             let doctor = doctors[data - 1];
             socket.join(doctor.room);
+            console.log(`Go skrtskrt:11111 ${doctor.fullName}`)
             console.log(`A user has connected to room ${doctor.room}`);
         });
 
@@ -55,6 +66,7 @@ async function main() {
             console.log(`${doctor.fullName} is asking for the next patient`);
 
             //logic for what happens on a doctor pressing "next".
+            doctor.save() // noice!
             doctor.next()
 
             io.to(doctor.room).emit("updatePatient")
@@ -78,6 +90,22 @@ async function main() {
             console.log(doctor.fName + " is updating.")
             io.to(doctor.room).emit("updateDoctor")
         })
+
+        socket.on("moveUp", (data) => {
+            console.log(`This is the data: ${data.hkid}`);
+            let doctor = doctors[data.doctor];
+            //console.log(doctor.queue)
+            doctor.move(`${data.hkid}`)
+            io.to(doctor.room).emit("updatePatient")
+        })
+
+        socket.on("removeQ", (data => {
+            console.log(`This is the data from removeQ button::::: ${data.doctor}`)
+            console.log(`This is the data from removeQ button::::: ${data.hkid}`)
+            let doctor = doctors[data.doctor];
+            doctor.remove(`${data.hkid}`)
+            io.to(doctor.room).emit("updatePatient")
+        }))
     });
 
     // Set up routes
@@ -100,8 +128,26 @@ async function main() {
 
     app.use("/checkin", checkinRouter.router());
     app.use("/api", apiRouter.router());
+    const receptionRouter = new ReceptionRouter(doctors);
+    app.use("/reception", receptionRouter.router());
 
+     //25/12 pris added render login and signup
+     app.get("/", (req, res) => {
+        res.render("login")
+    })
+     
+     app.get("/login", (req, res) => {
+         res.render("login")
+     }) 
 
+     app.get("/signup", (req, res) => {
+        res.render("signup")
+    })
+
+    //25/12 pris added 404 page render
+    app.all('*', (req, res) => {
+        res.status(404).render('error');
+    })
 
     // this code inputs some testing data for everyones styling.
     axios
@@ -116,6 +162,7 @@ async function main() {
                 hkid:i.location.postcode + "00",
                 dob:i.dob.date,
                 gender:i.gender,
+                doctor: docID,
             }));
             console.log(`localhost:http://localhost:8000/queue/${docID +1}/${i.name.first}_${i.name.last}`)
 
