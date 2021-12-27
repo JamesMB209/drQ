@@ -41,13 +41,13 @@ class Doctor {
 		this.queue.splice(position, 0, patient);
 	}
 
-	save(patientId, doctorId/*, updated_at*/) {
+	async save() {
 		// code if the whole booking was completed, eg. when the person checks out 
 		// the code needs to check if this patient has visited before 
 		// if no, adds new patient details to the DB
 
 		// if yes/after adding. add the appointment details to the database
-		this.knex('patient')
+		await this.knex('patient')
 			.select("id")
 			.where('id_card', "B69420691")
 			.then((row) => {
@@ -60,11 +60,15 @@ class Doctor {
 					.insert({
 						f_name: "test fname",
 						l_name: "test lname",
-						id_card: "test"
-						dob:
-						//note:
+						id_card: "test",
+						dob: this.queue[0].dob,
 					})
 				}
+			})
+
+		await this.knex('queue')
+			.insert({
+
 			})
 
 		// .exists(select)
