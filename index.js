@@ -7,11 +7,14 @@ const knex = require('knex')(knexFile);
 const axios = require('axios')
 const Doctor = require("./service/doctorService");
 const Patient = require("./service/patientService");
+// const Queue = require("./service/queueService");
 const ApiRouter = require("./router/apiRouter");
 const ReceptionRouter = require("./router/receptionRouter")
 const CheckinRouter = require("./router/checkinRouter");
-const DoctorRouter = require("./router/doctorRouter");
-const PatientRouter = require("./router/patientRouter.js");
+// const DoctorRouter = require("./router/doctorRouter");
+const History = require("./service/historyService");
+const history = new History;
+
 
 var app = express();
 const http = require("http").Server(app);
@@ -54,11 +57,10 @@ async function main() {
     // Set up Socket IO
     io.on("connection", (socket) => {
         socket.on("start", (data) => {
-            console.log(`Go skrtskrt:11111 ${data}`)
             let doctor = doctors[data - 1];
+
             socket.join(doctor.room);
-            console.log(`Go skrtskrt:11111 ${doctor.fullName}`)
-            console.log(`A user has connected to room ${doctor.room}`);
+            console.log(`A user has connected to room ${doctor.fullName}`);
         });
 
         socket.on("next", (data) => {
@@ -66,43 +68,41 @@ async function main() {
             console.log(`${doctor.fullName} is asking for the next patient`);
 
             //logic for what happens on a doctor pressing "next".
-            doctor.save() // noice!
-            doctor.next()
+            history.addBooking(doctor.queue[0]);
+            doctor.next();
 
             io.to(doctor.room).emit("updatePatient")
         })
 
         socket.on("newPatient", (data) => {
             let doctor = doctors[data - 1];
-            console.log("new patient added.")
+
             io.to(doctor.room).emit("updatePatient")
             io.to(doctor.room).emit("updateDoctor")
         })
 
         socket.on("updatePatient", (data) => {
             let doctor = doctors[data - 1];
-            console.log("updating all patients.")
+
             io.to(doctor.room).emit("updatePatient")
         })
 
         socket.on("updateDoctor", (data) => {
             let doctor = doctors[data - 1];
-            console.log(doctor.fName + " is updating.")
+
             io.to(doctor.room).emit("updateDoctor")
         })
 
         socket.on("moveUp", (data) => {
-            console.log(`This is the data: ${data.hkid}`);
             let doctor = doctors[data.doctor];
-            //console.log(doctor.queue)
+
             doctor.move(`${data.hkid}`)
             io.to(doctor.room).emit("updatePatient")
         })
 
         socket.on("removeQ", (data => {
-            console.log(`This is the data from removeQ button::::: ${data.doctor}`)
-            console.log(`This is the data from removeQ button::::: ${data.hkid}`)
             let doctor = doctors[data.doctor];
+
             doctor.remove(`${data.hkid}`)
             io.to(doctor.room).emit("updatePatient")
         }))
@@ -155,18 +155,20 @@ async function main() {
     .then((response) => {
         for (i of response.data.results) {
             let docID = Math.floor(Math.random() * doctors.length); 
+            let hkid = `${i.location.postcode}`.split(' ').join('');
+
             doctors[docID].addToQueue(new Patient({
                 fName:i.name.first,
                 lName:i.name.last,
                 temperature:Math.floor(Math.random()*3)+36,
-                hkid:i.location.postcode + "00",
+                hkid: hkid,
                 dob:i.dob.date,
                 gender:i.gender,
-                doctor: docID,
+                doctor: docID + 1,
             }));
-            console.log(`localhost:http://localhost:8000/queue/${docID +1}/${i.name.first}_${i.name.last}`)
 
-            doctors[docID].save(i.location.postcode+"00");
+            console.log(`${i.name.first} ${i.name.last}:http://localhost:8000/queue/${docID +1}/${hkid}`)
+            
         }
     })
 }

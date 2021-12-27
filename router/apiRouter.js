@@ -10,21 +10,20 @@ class ApiRouter {
         let router = express.Router();
         router.get(`/:doctor/:patient`, this.getPatient.bind(this));
         router.get(`/:doctor`, this.getDoctor.bind(this));
-        router.get(`/main`, this.getAll.bind(this));
         return router;
     }
 
-    async getPatient(req, res) {
-        try {
-            let doctor = this.doctors[parseInt(req.params.doctor) - 1];
-            doctor.patient(req.params.patient).then((patient) => {
-                res.send({
-                    patient: patient
-                })
-            });
-        } catch (err) {
+    getPatient(req, res) {
+        let doctor = this.doctors[parseInt(req.params.doctor) - 1];
+        doctor.patient(req.params.patient).then((patient) => {
+            res.send({
+                patient: patient
+            }); 
+        }).catch((err) => {
             console.log(err);
-        }
+            res.status(404).render('error');
+            }
+        );
     }
 
     getDoctor(req, res) {
@@ -33,10 +32,6 @@ class ApiRouter {
             doctor: doctor,
             queueLength: doctor.length(),
         })
-    }
-
-    getAll(req, res) {
-        console.log(`This is this.doctors: ${this.doctors}`)
     }
 }
 

@@ -1,97 +1,60 @@
-class Doctor {
-	constructor(doctor, knex) {
+const History = require("../service/historyService");
+
+class Doctor extends History {
+	constructor(doctor) {
+		super();
 		this.id = doctor.id;
 		this.fName = doctor.f_name;
 		this.lName = doctor.l_name;
 		this.room = doctor.room;
-		this.knex = knex;
 
 		this.fullName = `${doctor.f_name} ${doctor.l_name}`;
 		this.queue = [];
 	}
 
-	patient(url) {
+	patient(hkid) {
+		/**
+		 * Returns the patient object, Takes the HKID of the patient for reference.
+		 */
 		return new Promise((res, rej) => {
-			url = url.toLowerCase();
+			if (this.queue.findIndex(patient => patient.hkid == hkid) === -1) { rej() };
+			let patient = this.queue.find(patient => patient.hkid == hkid);
 
-			if (this.queue.findIndex(patient => patient.url == url) === -1) { rej("patient not found") };
-
-			this.queue.find(patient => patient.url == url).queuePosition = this.queue.findIndex(patient => patient.url == url);
-			res(this.queue.find(patient => patient.url == url));
+			patient.queuePosition = this.queue.findIndex(patient => patient.hkid == hkid);
+			res(patient);
 		})
 	}
 
 	addToQueue(patient) {
+		/**
+		 * Adds a patient object to the respective doctors queue.
+		 */
 		this.queue.push(patient);
 	}
 
 	next() {
-		this.queue.shift() // save to history 
-		this.queue.map(patient => patient.queuePosition--)
+		/**
+		 * Advances the doctors queue by one, by removing the patient in position 0.
+		 */
+		this.queue.shift()
 	}
 
 	length() {
+		/**
+		 * Returns the number of people in the Queue.
+		 */
 		return this.queue.length;
 	}
 
 	move(patient, position = 1) {
+		/**
+		 * Moves the patient object referenced by HKID to the specified position. (default 1)
+		 */
 		patient = this.queue.find(patient => patient.hkid == patient);
 		let patientPos = this.queue.indexOf(patient => patient.hkid == patient);
 		this.queue.splice(patientPos, 1);
 		this.queue.splice(position, 0, patient);
 	}
-
-	async save() {
-		// code if the whole booking was completed, eg. when the person checks out 
-		// the code needs to check if this patient has visited before 
-		// if no, adds new patient details to the DB
-
-		// if yes/after adding. add the appointment details to the database
-		await this.knex('patient') //check if patient exists 
-			.select("id")
-			.where('id_card', "B69420691")
-			.then((row) => {
-				if(row.length === 1) { // if yes.
-					console.log("returning patient");
-				} else { // if no
-					console.log("new patient")
-					this.knex('patient')
-					.insert({
-						f_name: "test fname",
-						l_name: "test lname",
-						id_card: "test",
-						dob: this.queue[0].dob,
-					})
-				}
-			})
-
-		await this.knex('queue')
-			.insert({
-
-			})
-
-		// .exists(select)
-		// select exists(select 1 from patient where id_card = 'B6942069')		
-
-		// this.knex("queue")
-		// 	.insert({
-		// 		patient_id: patientId,
-		// 		doctor_id: doctorId,
-		// 		checked_in: true
-		// 	})
-		// 	.then((result) => {
-		// 		console.log(`Patients data saved successfully! New data: ${result}`)
-		// 	})
-	}
-
-	// list() {
-	// 	return this.knex('queue')
-	// 		.innerJoin('patient', 'queue.patient_id', 'patient.id')
-	// 		.select('queue.id', 'queue.doctor_id', 'patient.f_name', 'patient.l_name')
-	// 		.where('queue.doctor_id', this.id)
-	// 		.orderBy('created_at', 'asc');
-	// }
-
 }
 
 module.exports = Doctor;

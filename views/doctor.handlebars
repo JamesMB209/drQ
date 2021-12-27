@@ -76,8 +76,7 @@
 
             $("#patientDob").html(new Date(doctor.queue[0].dob).toLocaleDateString());
 
-             $("#patientArrived").html(new Date(doctor.queue[0].arrived).toLocaleString());
-
+            $("#patientArrived").html(new Date(doctor.queue[0].arrived).toLocaleString());
             $("#patientVisitReason").html(doctor.queue[0].visitReason);
             $("#patientHistory").html(doctor.queue[0].history);
 
