@@ -144,7 +144,12 @@ async function main() {
         res.render("signup")
     })
 
-    //25/12 pris added 404 page render
+      //27/12 pris added board render
+      app.get("/board", (req, res) => {
+        res.render("board")
+    })
+
+    //25/12 pris added 404 page render (this needs to put at the end of GET req)
     app.all('*', (req, res) => {
         res.status(404).render('error');
     })

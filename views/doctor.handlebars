@@ -40,7 +40,6 @@
 </section>
 
 <!--bottom image-->
-
     <div class="doctor_image mt-3"> <img src="/asset/11.png" alt="doctor" >
       <div class="doctor_rec text-center">
     </div>
@@ -71,28 +70,14 @@
             $("#queueLength").html(response.data.queueLength);
             $("#patientFullName").html(doctor.queue[0].fullName);
             $("#patientGender").html(doctor.queue[0].gender);
-
             $("#patientAge").html(new Date().getFullYear() - new Date(doctor.queue[0].dob).getFullYear());
-
             $("#patientDob").html(new Date(doctor.queue[0].dob).toLocaleDateString());
 
             $("#patientArrived").html(new Date(doctor.queue[0].arrived).toLocaleString());
             $("#patientVisitReason").html(doctor.queue[0].visitReason);
-            $("#patientHistory").html(doctor.queue[0].history);
-
-            // process date and DOB before adding ot html
-            // 
-
-            /*console.log("Patient Age: " +doctor.queue[0].patientAge);
-            console.log("Arrived: " + doctor.queue[0].arrived);
-           
-            console.log(doctor.queue[0].fullName);
-            console.log(doctor.queue[0].hkid);
-            console.log("AGE!!!!", new Date().getFullYear() - new Date(doctor.queue[0].dob).getFullYear() );
-		        console.log("Current year", ); */
-
-      
+            $("#patientHistory").html(doctor.queue[0].history);    
           })
+          
           .catch((err) => {
             console.log(err);
           });
