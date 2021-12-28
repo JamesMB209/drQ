@@ -1,0 +1,51 @@
+<section id="board">
+<div class="page_name col-10 m-4" style="background-color: #00c4cc">
+<h5>Live Info</h5>
+</div>
+
+<section id="board">
+<div class="m-5 doc_info">
+<p> Doctor: <span id="fullName"></span></p>
+<p> Room: <span id="room"></span></p>
+</div>
+
+
+<!--Patient in queue-->
+  <div class="patient_queue p-4 text-center pt-5 m-3">
+    <h4 class="pb-5" style="color: #AA8F00;"> Patient(s) in queue:</h4>
+    <h2 id="queueLength"></h2>
+  </div>
+
+</div>
+</section>
+
+<!--bottom image-->
+    <div class="doctor_image mt-3"> <img src="/asset/11.png" alt="doctor" >
+      <div class="doctor_rec text-center">
+    </div>
+  </div>
+
+<script>
+      $(() => {
+        //Set up socket connection
+        let socket = io.connect("{{socket}}");
+        socket.emit("start", {{doctor}});
+        
+        //set up listners
+        socket.on("updateDoctor", () => {
+          axios
+          .get("/api/{{doctor}}")
+          .then((response) => {
+            let doctor = response.data.doctor;
+            $("#queueLength").html(response.data.queueLength);
+      
+          })
+          .catch((err) => {
+            console.log(err);
+          });
+        });
+
+        //emit an update request to load the inital data once only.
+        socket.emit("updateDoctor", {{doctor}});
+      });
+    </script>

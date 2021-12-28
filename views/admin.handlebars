@@ -3,18 +3,17 @@
 <h5>Admin Page</h5>
 </div>
 
-<div class="row  justify-content-center m-5">
+<div class="row  justify-content-center p-1 my-5">
     {{#each doctor}}
-        <div class="col-lg-3 col-md-6 col-sm-12 m-5 queue_list">
+        <div class="col-lg-3 col-md-6 col-sm-12 m-3 queue_list">
             <h4 class="docNames text-center p-4">Dr. {{fullName}} <br> Room: {{room}}</h4>
             <br>
 
         {{#each queue}}
-        <button class="moveButton m-2" doctor="{{assignedDoctor}}" hkid="{{hkid}}">Move Up</button>
+        <button class="moveButton m-2" doctor="{{assignedDoctor}}" hkid="{{hkid}}"> Move Up <i class="fas fa-long-arrow-alt-up"></i>  </button>
 
         <span>
-         {{inc @index}}
-        {{fName}} {{lName}}
+         {{inc @index}}. {{fName}} {{lName}}
         </span>
         
         <button class="deleteFromQueue" doctor="{{assignedDoctor}}" hkid="{{hkid}}" style="color: red;">Delete</button>
