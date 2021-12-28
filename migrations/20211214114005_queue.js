@@ -8,8 +8,10 @@ exports.up = function(knex) {
 	table.foreign('doctor_id').references('doctor.id');
 	table.boolean('checked_in');	
 	table.timestamps(false, true);
-	table.string("arrival");
-	table.string("departure")
+	table.string('arrival');
+	table.string('departure');
+	table.string('left_wo_seeing');
+	table.string('reason')
 	})
 };
 

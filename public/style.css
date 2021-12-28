@@ -329,3 +329,33 @@ textarea {
     font-weight: 500;
 }
 
+
+
+/* Patient ------------- done by Mr. P */
+.displayBox {
+    /* background-color: black; */
+    height: 50vh;
+    /* margin-bottom: 100vh; */
+}
+
+#displayBoxInside {
+    margin: auto;
+    margin-top: 50px;
+    height: 50vh;
+    width: 75vw;
+    padding: 0vh 5vw;
+    /* background-color: aqua; */
+    /* display: flex; */
+    justify-content: center;
+    /*align-items: flex-start;
+    flex-direction: column; */
+    border: 1px solid #007075;
+    border-radius: 20px;
+    /* position: relative;
+    top: 10vh; */
+}
+
+
+
+
+/* Patient ------------- done by Mr. P */

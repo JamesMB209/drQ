@@ -1,9 +1,27 @@
-<div id="displayBox">
-<p id="fName"></p>
-<p id="lName"></p>
-<p id="fullName"></p>
-<p id="queue_position"></p>
+<div class="page_name" style="background-color: #00c4cc;">
+<h6 class="">Patient's Queue</h6>
+
 </div>
+
+{{!--  --}}
+<div class="displayBox">
+  <div id="displayBoxInside">
+    <p id="fullName" class="mt-5">Patient's Name: <strong><span class="fullName"></span></strong></p>
+    <p id="queueDoctor">Doctor: <strong><span class="queueDoctor"></span></strong></p>
+    <p id="queueRoom">Room: <strong><span class="queueRoom"></span></strong></p>
+    <p id="queue_position">Queue Position: <strong><span class="queue_position"></span></strong></p>
+    <p id="queueWait">Approximate wait time: <strong><span class="queueWait"></span></strong> minutes</p>
+  </div> 
+</div>
+{{!-- styling --}}
+<section id="checkin">
+<div class="container">
+    <div class="patient_img text-center"> <img src="/asset/4.png" alt="" width="50%" >
+      <div class="patient_rec text-center col-12">
+    </div>
+  </div>
+</div>
+</section>
 
 <script>
       $(() => {
@@ -17,13 +35,27 @@
           .get("/api/{{doctor}}/{{patient}}")
           .then((data) => {
             let patient = data.data.patient;
-            if(patient.queuePosition !== 0) { 
-              $("#fName").html(patient.fName);
-              $("#lName").html(patient.lName);
-              $("#fullName").html(patient.fullName);
-              $("#queue_position").html(patient.queuePosition);
+            if(patient.queuePosition !== 0) {
+              $(".fullName").html(patient.fullName);
+              $(".queue_position").html(patient.queuePosition);
+              $(".queueWait").html(patient.queuePosition * 7);
+              axios.get("/api/{{doctor}}")
+              .then((response) => {
+                let doctor = response.data.doctor;
+              $(".queueDoctor").html(`Dr. ${doctor.lName} ${doctor.fName}`)
+              $(".queueRoom").html(doctor.room)
+              })
             } else {
-              $("#displayBox").html("you kno de wai.")
+              $("#displayBoxInside").css({"background-color": "#00c4cc", "font-size": "35px", "color": "white", "text-align": "center", "display": "flex", "justify-content": "center", "flex-direction": "column"})
+              $(".fullName").html(patient.fullName);
+              $("#queueRoom").html(``)
+              $("#queue_position").html(``)
+              $("#queueWait").html(``)
+              axios.get("/api/{{doctor}}")
+              .then((response) => {
+                let doctor = response.data.doctor;
+              $("#queueDoctor").html(`<strong>Please go to room <strong>${doctor.room}</strong>`);
+              })
             }
           })
           .catch((err) => {

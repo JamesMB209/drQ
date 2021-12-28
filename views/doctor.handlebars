@@ -44,6 +44,12 @@
       <div class="doctor_rec text-center">
     </div>
   </div>
+  
+
+</section>
+<div class="logout">
+  <button id="button">Log Out</button>
+</div>
 
 <script>
       $(() => {
@@ -86,3 +92,12 @@
         socket.emit("updateDoctor", {{doctor}});
       });
     </script>
+<script type="text/javascript">
+  let logoutButton = document.getElementById("button");
+  logoutButton.addEventListener("click", () => {
+    $.get("/logout", (data) => {
+      console.log(data);
+      window.location.reload()
+    })
+  })
+ </script>

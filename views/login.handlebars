@@ -7,12 +7,16 @@
 <form action="/doctor/1" method="post" >
   <p>Please log in</p>
   <hr>
+
+<form action="/login" method="post">
     <label for="username">Username <br />
     <input type="text" name="username" id="username" placeholder=" username">
     </label>
     <br />
     <label for="password">Password <br />
     <input type="password" name="password" id="password" placeholder=" password">
+    {{message}}
+    <input type="password" name="password" id="password">
     </label>
     <br />
     <button type="submit" class="login_btn">LOGIN</button>

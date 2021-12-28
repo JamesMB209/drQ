@@ -41,18 +41,17 @@
     <input type="text" name="username" id="username" required>
     </label>
     <br />
-    <label for="password">Password <br />
+    <label for="password">Password: <br />
     <input type="password" name="password" id="password" required>
     </label>
     <br />
-    <label for="tag" id="tag">Select one:</label>
+    <label for="tag">Choose one:</label>
     <br />
-    <select name="tag" id="tag" required>
-        <br />
-        <option></option>
-        <option name="tag" value="doctor">Doctor</option>
-        <option name="tag" value="reception">Reception</option>
-    </select>
+    <input type="radio" name="tag" id="doctor" value="Doctor">
+    <label for="doctor">Doctor</label>
+    <input type="radio" name="tag" id="admin" value="admin">
+    <label for="admin">Admin</label>
+    <br />
     <br />
     <button type="submit">Create account</button>
 </form>  --}}

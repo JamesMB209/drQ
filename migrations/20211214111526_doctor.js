@@ -5,6 +5,7 @@ exports.up = function(knex) {
 	table.string("f_name");
 	table.string("l_name");
 	table.string("room");
+	table.string("username")
 	})  
 };
 
