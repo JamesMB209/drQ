@@ -8,6 +8,9 @@
         </div>
     {{/each}}
 </div>
+<div class="logout">
+  <button id="button">Log Out</button>
+</div>
 
 <script>
     $(() => {
@@ -18,14 +21,31 @@
               doctor: e.currentTarget.attributes.doctor.nodeValue,
               hkid: e.currentTarget.attributes.hkid.nodeValue
           })
+          socket.emit("updateMain")
         });
         $(".deleteFromQueue").on("click", (e) => {
-            socket.emit("removeQ", {
-                doctor: e.currentTarget.attributes.doctor.nodeValue,
-                hkid: e.currentTarget.attributes.hkid.nodeValue
-            })
+            if(confirm(`Delete from queue? Action cannot be undone!`) == true) {
+                socket.emit("removeQ", {
+                    doctor: e.currentTarget.attributes.doctor.nodeValue,
+                    hkid: e.currentTarget.attributes.hkid.nodeValue
+                })
+                socket.emit("updateMain")
+            } else {
+                return
+            }
         })
-
-
+        // refresh the page
+        socket.on("updateMain", () => {
+            location.reload()
+        })
     })
 </script>
+<script type="text/javascript">
+        let logoutButton = document.getElementById("button");
+        logoutButton.addEventListener("click", () => {
+            $.get("/logout", (data) => {
+                console.log(data);
+                window.location.reload()
+            })
+        })
+        </script>

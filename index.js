@@ -12,6 +12,9 @@ const ReceptionRouter = require("./router/receptionRouter")
 const CheckinRouter = require("./router/checkinRouter");
 const DoctorRouter = require("./router/doctorRouter");
 const PatientRouter = require("./router/patientRouter.js");
+const setPassport = require("./passport")
+const passportRouter = require("./router/passportRouter")(express)
+
 
 var app = express();
 const http = require("http").Server(app);
@@ -25,10 +28,39 @@ app.use(express.urlencoded({ extended: false }))
 app.use(express.json());
 
 app.use(express.static('public'));
+
+
+// Passport-local --------------------------------------------- Passport-Local
+const passport = require("passport");
+const LocalStrategy = require("passport-local").Strategy;
+const hashFunctions = require("./brcypt");
+const session = require("express-session");
+
+app.use(session({
+    secret: process.env.SECRET,
+    resave: false,
+    saveUninitialized: true
+}))
+
+// **Passport**
+setPassport(app);
+app.use('/', passportRouter);
+// **Passport**
+
 http.listen(8000);
 console.log("App listening to port 8000")
 
 async function main() {
+    // Check for logged in auth
+    function isLoggedIn(req, res, next) {
+        console.log(req.isAuthenticated())
+        if(req.isAuthenticated()) {
+            return next()
+        } else {
+            res.redirect("/login")
+        }
+    }
+
     // Load doctors from db.
     let doctors = [];
     let db_doctor = await knex("doctor")
@@ -68,6 +100,7 @@ async function main() {
             console.log("new patient added.")
             io.to(doctor.room).emit("updatePatient")
             io.to(doctor.room).emit("updateDoctor")
+            socket.emit("updateMain") // update /reception when new patient is connected
         })
 
         socket.on("updatePatient", (data) => {
@@ -85,9 +118,9 @@ async function main() {
         socket.on("moveUp", (data) => {
             console.log(`This is the data: ${data.hkid}`);
             let doctor = doctors[data.doctor];
-            //console.log(doctor.queue)
             doctor.move(`${data.hkid}`)
             io.to(doctor.room).emit("updatePatient")
+            socket.emit("updateMain")
         })
 
         socket.on("removeQ", (data => {
@@ -96,12 +129,13 @@ async function main() {
             let doctor = doctors[data.doctor];
             doctor.remove(`${data.hkid}`)
             io.to(doctor.room).emit("updatePatient")
+            socket.emit("updateMain")
         }))
     });
 
     // Set up routes
     // Doctor dashboard -- needs auth
-    app.get("/doctor/:id", (req, res) => {
+    app.get("/doctor/:id", isLoggedIn, (req, res) => {
         res.render("doctor", {
             doctor: req.params.id,
             socket: "http://localhost:8000"
@@ -120,13 +154,13 @@ async function main() {
     app.use("/checkin", checkinRouter.router());
     app.use("/api", apiRouter.router());
     const receptionRouter = new ReceptionRouter(doctors);
-    app.use("/reception", receptionRouter.router());
+    app.use("/reception", isLoggedIn, receptionRouter.router());
 
 
 
     // this code inputs some testing data for everyones styling.
     axios
-    .get("https://randomuser.me/api/?results=50")
+    .get("https://randomuser.me/api/?results=5")
     .then((response) => {
         for (i of response.data.results) {
             let docID = Math.floor(Math.random() * doctors.length); 

@@ -37,17 +37,20 @@ class Doctor {
 	}
 
 	save() {
-		return this.knex("queue")
-			.insert({
-				// patient_id: this.queue.patient.assignedDoctor + 1,// doesnt work
-				patient_id: 1,
-				doctor_id: this.id,// doesnt work
-				checked_in: true, //purrfect
-				departure: new Date() //purrfect
-			})
-			.then((result) => {
-				console.log(`Patients data saved successfully! New data: ${result}`)
-			})
+		if (this.queue.length > 0) {
+			return this.knex("queue")
+				.insert({
+					patient_id: 1, // how to get the patients id
+					doctor_id: this.id,
+					checked_in: true, 
+					departure: new Date() 
+				})
+				.then((result) => {
+					console.log(`Patients data saved successfully! New data: ${result}`)
+				})
+		} else {
+			return`No one in queue`
+		}
 	}
 
 	list() {
@@ -80,6 +83,18 @@ class Doctor {
 		let patientPos = this.queue.findIndex(patient => patient.hkid == hkid);
 		console.log(`Hi I'm Poppy.....${patientPos}`)
 		this.queue.splice(patientPos, 1);
+		// let reason = prompt("Reason for deletion: ")
+		return this.knex("queue")
+		.insert({
+			patient_id: 1, // how to get the patients id
+			doctor_id: this.id,
+			checked_in: true,
+			left_wo_seeing: new Date(),
+			// reason: reason
+		})
+		.then((data) => {
+			console.log(`Patient deleted from queue and time deleted is stored in the database: ${data}`)
+		})
 	}
 }
 
