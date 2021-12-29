@@ -1,7 +1,7 @@
 {{!-- this will be the signup page --}}
 
 
-<section id="login" class="flex row">
+<section id="signup" class="flex row">
 
 <div class="item col-6">
   <div class="login_box">
@@ -19,6 +19,13 @@
     <label for="room">Enter your room:</label>
     <br />
     <input type="text" name="room" id="room">
+  <label for="f_name">First name</label>
+    <br />
+    <input type="text" name="f_name" id="f_name" placeholder=" first name"required>
+    <br />
+    <label for="l_name">Last name</label>
+    <br />
+    <input type="text" name="l_name" id="l_name" placeholder=" last name" required>
     <br />
     <label for="username">Username <br />
     <input type="text" name="username" id="username" placeholder=" username" required>
@@ -28,13 +35,18 @@
     <input type="password" name="password" id="password" placeholder=" password" required>
     </label>
     <br>
+      <label for="password">Confirm Password <br />
+    <input type="password" name="password" id="confirm_password" placeholder=" confirm password" required>
+    </label>
+    <br>
+
       <label for="tag" id="tag">Select your account type:</label>
     <br />
-    <select name="tag" id="tag" required>
-        <br>
-        <option name="tag" value="Doctor">Doctor</option>
-        <option name="tag" value="Reception">Admin</option>
-    </select>
+    <input type="radio" name="tag" id="doctor" value="Doctor">
+    <label for="doctor">Doctor</label>
+    <input type="radio" name="tag" id="admin" value="admin">
+    <label for="admin">Admin</label>
+ 
     <br>
     <button type="submit" class="login_btn">CREATE ACCOUNT</button>
     <p class="other_signin">sign up with <a href="#passport"> <img src="/asset/google_logo.png" alt="google" ></a></p>

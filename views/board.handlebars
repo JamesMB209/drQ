@@ -3,16 +3,16 @@
 <h5>Live Info</h5>
 </div>
 
-<section id="board">
-<div class="m-5 doc_info">
-<p> Doctor: <span id="fullName"></span></p>
-<p> Room: <span id="room"></span></p>
-</div>
 
 
-<!--Patient in queue-->
-  <div class="patient_queue p-4 text-center pt-5 m-3">
-    <h4 class="pb-5" style="color: #AA8F00;"> Patient(s) in queue:</h4>
+<!--each room info-->
+  <div class="board_box text-center m-3">
+        <p> Doctor: <span id="fullName"></span></p>
+        <p> Room: <span id="room"></span></p>
+
+    <h4 class="pb-5" style="color: #00C4CC;"> Calling number:</h4>
+
+    <h4 class="pb-5" style="color: #00C4CC;"> Total in queue: </h4>
     <h2 id="queueLength"></h2>
   </div>
 
@@ -38,6 +38,8 @@
           .then((response) => {
             let doctor = response.data.doctor;
             $("#queueLength").html(response.data.queueLength);
+            $("#fullName").html(doctor.fullName);
+            $("#room").html(doctor.room);
       
           })
           .catch((err) => {

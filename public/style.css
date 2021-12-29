@@ -43,6 +43,7 @@ input {
     border: 1px solid #007075;
     border-radius: 5px;
     line-height: 2;
+    margin-bottom: 10px;
 }
 
 input[type=text], [type=password] {
@@ -97,7 +98,7 @@ input:focus {
   }
 
 /*==============================================================*/
-/*patient check in*/
+/*patient check in form*/
 
  #checkin .container {
     display: flex;
@@ -209,7 +210,7 @@ textarea {
 
 .login_box {
     border: 1px solid #007075;
-    padding: 40px 100px;
+    padding: 50px 120px;
     border-radius: 20px;
     box-sizing: border-box;
     box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
@@ -224,6 +225,8 @@ textarea {
     margin-top: 40px;
     box-sizing: border-box;
     letter-spacing: 1.2px;
+    margin: 30px 20px;
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
 #login p {
@@ -276,12 +279,52 @@ textarea {
     font-weight: 500;
 }
 
-@media only screen and (max-width: 768px) {
-    /* For mobile phones: */
-    [class*="col-"] {
-      width: 100%;
-    }
+/*==============================================================*/
+/* signup page */
+
+#signup.flex {
+    display: flex;
+    flex-direction: row; 
+    margin-bottom: 70px ;
 }
+
+#signup .item {
+    display: flex;
+    flex: 1;
+    margin: 30px;
+    justify-content: center;
+    align-items: center;
+}
+
+#signup p {
+    text-align: center;
+    color: #007075;
+}
+
+#signup hr {
+    color: #00C4CC;
+    margin: -15px auto 40px auto;
+    height: 2px;
+    width: 100px;  
+}
+
+/* #signup label {
+    color: #007075;
+    line-height: 30px;
+} */
+
+#signup input {
+    border: 1px solid #a0a0a08e;
+    border-radius: 0px;
+    margin-bottom: 10px;
+    
+}
+
+
+
+#signup input:focus {
+    background-color: #00c5cc29;
+  }
 
 /*==============================================================*/
 /* admin page */

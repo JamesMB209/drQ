@@ -172,10 +172,10 @@ async function main() {
     const receptionRouter = new ReceptionRouter(doctors);
     app.use("/reception", isLoggedIn, receptionRouter.router());
 
-    //   //27/12 pris added board render
-    //   app.get("/board", (req, res) => {
-    //     res.render("board")
-    // })
+      //27/12 pris added board render
+      app.get("/board", (req, res) => {
+        res.render("board")
+    })
 
     //25/12 pris added 404 page render (this needs to put at the end of GET req)
     app.all('*', (req, res) => {
