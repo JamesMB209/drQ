@@ -167,17 +167,17 @@ async function main() {
     app.use("/reception", isLoggedIn, receptionRouter.router());
 
      //25/12 pris added render login and signup
-     app.get("/", (req, res) => {
-        res.render("login")
-    })
+    //  app.get("/", (req, res) => {
+    //     res.render("login")
+    // })
      
-     app.get("/login", (req, res) => {
-         res.render("login")
-     }) 
+    //  app.get("/login", (req, res) => {
+    //      res.render("login")
+    //  }) 
 
-     app.get("/signup", (req, res) => {
-        res.render("signup")
-    })
+    //  app.get("/signup", (req, res) => {
+    //     res.render("signup")
+    // })
 
       //27/12 pris added board render
       app.get("/board", (req, res) => {
