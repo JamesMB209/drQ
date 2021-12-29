@@ -1,35 +1,39 @@
 <section id="board">
 <div class="page_name col-10 m-4" style="background-color: #00c4cc">
-<h5>Live Info</h5>
+<h5>Queue Board</h5>
 </div>
 
+<div class="row  justify-content-center p-1 my-5">
+    {{#each doctor}}
+        <div class="col-lg-3 col-md-6 col-sm-12 m-3 queue_list">
+            <h4 class="docNames text-center p-4">Dr. {{fullName}} <br> Room: {{room}}</h4>
+            <br>
+            <h4>Calling:  </h4>
+            <h4>Total in queue: {{queue}}</h4>
+            <h4 id="queueLength"></h4>
+
+        {{#each queue}}
+        
 
 
-<!--each room info-->
-  <div class="board_box text-center m-3">
-        <p> Doctor: <span id="fullName"></span></p>
-        <p> Room: <span id="room"></span></p>
 
-    <h4 class="pb-5" style="color: #00C4CC;"> Calling number:</h4>
-
-    <h4 class="pb-5" style="color: #00C4CC;"> Total in queue: </h4>
-    <h2 id="queueLength"></h2>
-  </div>
-
+        {{/each}}
+        </div>
+    {{/each}}
 </div>
 </section>
 
-<!--bottom image-->
-    <div class="doctor_image mt-3"> <img src="/asset/11.png" alt="doctor" >
-      <div class="doctor_rec text-center">
-    </div>
-  </div>
 
 <script>
-      $(() => {
-        //Set up socket connection
-        let socket = io.connect("{{socket}}");
+    $(() => {
+        let socket = io.connect("{{socket}}")
         socket.emit("start", {{doctor}});
+
+        //bind eventhandlers to emits
+        $("#next").on("click", () => {
+          socket.emit("next", {{doctor}});
+          socket.emit("updateDoctor", {{doctor}});
+        });
         
         //set up listners
         socket.on("updateDoctor", () => {
@@ -37,17 +41,28 @@
           .get("/api/{{doctor}}")
           .then((response) => {
             let doctor = response.data.doctor;
-            $("#queueLength").html(response.data.queueLength);
+            $("#fName").html(doctor.fName);
+            $("#lName").html(doctor.lName);
             $("#fullName").html(doctor.fullName);
             $("#room").html(doctor.room);
-      
+            $("#queueLength").html(response.data.queueLength);
+            $("#patientFullName").html(doctor.queue[0].fullName);
+            $("#patientGender").html(doctor.queue[0].gender);
+            $("#patientAge").html(new Date().getFullYear() - new Date(doctor.queue[0].dob).getFullYear());
+            $("#patientDob").html(new Date(doctor.queue[0].dob).toLocaleDateString());
+            $("#patientArrived").html(new Date(doctor.queue[0].arrived).toLocaleString());
+            $("#patientVisitReason").html(doctor.queue[0].visitReason);
+            $("#patientHistory").html(doctor.queue[0].history);    
           })
+          
           .catch((err) => {
             console.log(err);
           });
         });
-
-        //emit an update request to load the inital data once only.
-        socket.emit("updateDoctor", {{doctor}});
-      });
-    </script>
+      
+        // refresh the page
+        socket.on("updateMain", () => {
+            location.reload()
+        })
+    })
+</script>

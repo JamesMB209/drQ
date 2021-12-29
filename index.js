@@ -10,6 +10,8 @@ const Patient = require("./service/patientService");
 // const Queue = require("./service/queueService");
 const ApiRouter = require("./router/apiRouter");
 const ReceptionRouter = require("./router/receptionRouter")
+//pris add Board Router
+const BoardRouter = require("./router/boardRouter");
 const CheckinRouter = require("./router/checkinRouter");
 // const DoctorRouter = require("./router/doctorRouter");
 const History = require("./service/historyService");
@@ -151,7 +153,7 @@ async function main() {
 
     // Set up routes
     // Doctor dashboard -- needs auth
-    app.get("/doctor/:id", isLoggedIn, (req, res) => {
+    app.get("/doctor/:id", (req, res) => {
         res.render("doctor", {
             doctor: req.params.id,
             socket: "http://localhost:8000"
@@ -170,12 +172,16 @@ async function main() {
     app.use("/checkin", checkinRouter.router());
     app.use("/api", apiRouter.router());
     const receptionRouter = new ReceptionRouter(doctors);
-    app.use("/reception", isLoggedIn, receptionRouter.router());
+    app.use("/reception", receptionRouter.router());
+
+    //pris add Board Router
+    const boardRouter = new BoardRouter(doctors);
+    app.use("/board", boardRouter.router());
 
       //27/12 pris added board render
-      app.get("/board", (req, res) => {
+   /*    app.get("/board", (req, res) => {
         res.render("board")
-    })
+    }) */
 
     //25/12 pris added 404 page render (this needs to put at the end of GET req)
     app.all('*', (req, res) => {
