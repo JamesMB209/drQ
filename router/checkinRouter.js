@@ -31,7 +31,12 @@ class CheckinRouter {
         // // If valid create new patient.
         // // Add this paitent to the doctors queue.
         doctor.addToQueue(new Patient(req.body));
-        history.savePatient(req.body);
+        history.savePatient(req.body)
+            .then((id) => {
+                doctor.queue[doctor.queue.length-1].id = id[0];
+                console.log(doctor.queue[doctor.queue.length-1]);
+            })
+            .catch(err => console.log("returning patient"));
 
         // // redirect to paitent dashboard "/queue/:doctor/:patient"
         let patientURL = `${req.body.hkid}`.split(" ").join("");

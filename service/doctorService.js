@@ -1,32 +1,35 @@
-const { default: knex } = require("knex");
-const History = require("../service/historyService");
-
-class Doctor extends History {
+class Doctor {
 	constructor(doctor, knex) {
-		super();
 		this.id = doctor.id;
 		this.fName = doctor.f_name;
 		this.lName = doctor.l_name;
 		this.room = doctor.room;
 		this.knex = knex;
-
+		
 		this.fullName = `${doctor.f_name} ${doctor.l_name}`;
 		this.queue = [];
 	}
-
+	
 	patient(hkid) {
 		/**
-		 * Returns the patient object, Takes the HKID of the patient for reference.
+		 * Returns a promise of the patient object from the HKID if exists.
 		 */
 		return new Promise((res, rej) => {
 			if (this.queue.findIndex(patient => patient.hkid == hkid) === -1) { rej() };
 			let patient = this.queue.find(patient => patient.hkid == hkid);
-
+			
 			patient.queuePosition = this.queue.findIndex(patient => patient.hkid == hkid);
 			res(patient);
 		})
 	}
 
+	patientIndex(hkid) {
+		/**
+		 * Returns the index of the patient.
+		 */
+		return this.queue.findIndex(patient => patient.hkid == hkid);
+	}
+	
 	addToQueue(patient) {
 		/**
 		 * Adds a patient object to the respective doctors queue.
@@ -48,81 +51,23 @@ class Doctor extends History {
 		return this.queue.length;
 	}
 
-	save() {
-		if (this.queue.length > 0) {
-			return this.knex("queue")
-				.insert({
-					patient_id: 1, // how to get the patients id
-					doctor_id: this.id,
-					checked_in: true, 
-					departure: new Date() 
-				})
-				.then((result) => {
-					console.log(`Patients data saved successfully! New data: ${result}`)
-				})
-		} else {
-			return`No one in queue`
-		}
-	}
-
-	list() {
-		return this.knex('queue')
-			.innerJoin('patient', 'queue.patient_id', 'patient.id')
-			.select('queue.id', 'queue.doctor_id', 'patient.f_name', 'patient.l_name')
-			.where('queue.doctor_id', this.id)
-			.orderBy('created_at', 'asc');
-	}
-	// Admin superpowers ---- update Que and remove from Que
 	move(hkid, position=1) {
-        let patient = this.queue.find(patient => patient.hkid == hkid);
-		console.log(`Patient:::::::::: ${patient}`)
-        let patientPos = this.queue.findIndex(patient => patient.hkid == hkid);
-		console.log(patientPos)
-		console.log(this.queue[0], this.queue[1]);
-		if (patientPos > 1) { // --> fixes bugs
-			console.log(hkid);
-			console.log("cluclucluclu" + patient);
-			this.queue.splice(patientPos, 1);
-			this.queue.splice(position, 0, patient);
-		} else {
-			return
-		}
+		/**
+		 * Move the patient referenced by the HKID to the specified position. Default 1 (first inline).
+		 */
+		this.patient(hkid).then(patient => {
+			if (this.patientIndex(hkid) > 1) {
+				this.queue.splice(this.patientIndex(hkid), 1);
+				this.queue.splice(position, 0, patient);
+			}
+		})
     }
-	
-	async remove(hkid) {
-		console.log(`Patient removed from doctor`, this.doctor)
-		console.log("NAME", this.fullName)
-		console.log("ID",this.id)
-		console.log("ROOM",this.room)
-		console.log("The id of this fucking patient is ", this.queue)
-		let patient = this.queue.find(patient => patient.hkid == hkid);
-		console.log(`Wee WEE a ${patient.fullName}`)
-		let patientPos = this.queue.findIndex(patient => patient.hkid == hkid);
-		console.log(`Hi I'm Poppy.....${patientPos}`)
-		this.queue.splice(patientPos, 1);
-		// let reason = prompt("Reason for deletion: ")
-		let patientID;
-		await this.knex('patient')
-		.select("id")
-		.where('id_card', patient.hkid)
-		.then(async (row) => {
-			console.log(`Hi im from historyService`, row[0].id)
-			patientID = await row[0].id
-		}).catch((err) => {
-			console.error(err);
-		})
-		let newHistory = {
-			patient_id: patientID,
-			doctor_id: this.id,
-			checked_in: true,
-			left_wo_seeing: new Date(),
-			// reason: reason
-		}
-		await this.knex("appointment_history")
-		.insert(newHistory)
-		.then((data) => {
-			console.log(`Patient deleted from queue and time deleted is stored in the database: ${data}`)
-		})
+
+	remove(hkid) {
+		/**
+		 * removes the patient with the specified HKID.
+		 */
+		this.queue.splice(this.patientIndex(hkid), 1);
 	}
 }
 

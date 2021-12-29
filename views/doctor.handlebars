@@ -21,6 +21,7 @@
       <p>Visit Reason: <span id="patientVisitReason"></span></p>
       <p>History: <span id="patientHistory"></span></p>
       <p>Arrived time: <span id="patientArrived"></span></p>
+      <p>Diagnosis:<textarea id="diagnosis"></textarea></p>
     </div>
 
 
@@ -59,8 +60,12 @@
 
         //bind eventhandlers to emits
         $("#next").on("click", () => {
-          socket.emit("next", {{doctor}});
+          socket.emit("next", {
+            doctorId:{{doctor}},
+            diagnosis:$("#diagnosis").val(),
+            });
           socket.emit("updateDoctor", {{doctor}});
+          $("#diagnosis").val("");
         });
         
         //set up listners
@@ -69,18 +74,23 @@
           .get("/api/{{doctor}}")
           .then((response) => {
             let doctor = response.data.doctor;
+            let patient = doctor.queue[0];
+
+            //doctor details
             $("#fName").html(doctor.fName);
             $("#lName").html(doctor.lName);
             $("#fullName").html(doctor.fullName);
             $("#room").html(doctor.room);
             $("#queueLength").html(response.data.queueLength);
-            $("#patientFullName").html(doctor.queue[0].fullName);
-            $("#patientGender").html(doctor.queue[0].gender);
-            $("#patientAge").html(new Date().getFullYear() - new Date(doctor.queue[0].dob).getFullYear());
-            $("#patientDob").html(new Date(doctor.queue[0].dob).toLocaleDateString());
-            $("#patientArrived").html(new Date(doctor.queue[0].arrived).toLocaleString());
-            $("#patientVisitReason").html(doctor.queue[0].visitReason);
-            $("#patientHistory").html(doctor.queue[0].history);    
+
+            //patient details
+            $("#patientFullName").html(patient.fullName);
+            $("#patientGender").html(patient.gender);
+            $("#patientAge").html(new Date().getFullYear() - new Date(patient.dob).getFullYear());
+            $("#patientDob").html(new Date(patient.dob).toLocaleDateString());
+            $("#patientArrived").html(new Date(patient.arrived).toLocaleString());
+            $("#patientVisitReason").html(patient.visitReason);
+            $("#patientHistory").html(patient.history);
           })
           
           .catch((err) => {

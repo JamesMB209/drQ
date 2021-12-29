@@ -96,11 +96,15 @@ async function main() {
         });
 
         socket.on("next", (data) => {
-            let doctor = doctors[data - 1];
+            console.log(data);
+            let doctor = doctors[data.doctorId - 1];
             console.log(`${doctor.fullName} is asking for the next patient`);
 
             //logic for what happens on a doctor pressing "next".
-            history.addBooking(doctor.queue[0]);
+            //update the appointment history.
+            history.saveDiagnosis(doctor.id, doctor.queue[0].id, data.diagnosis);
+            history.saveBooking(doctor.queue[0], true);
+            //advance the doctors queue.
             doctor.next();
 
             io.to(doctor.room).emit("updatePatient")
@@ -135,11 +139,19 @@ async function main() {
         })
 
         socket.on("removeQ", (data => {
-            console.log("this is data this is data", data)
-            console.log("and this is the doctors array", doctors)
             let doctor = doctors[data.doctor - 1];
+            
+            //update the appointment history database.
+            doctor.patient(data.hkid)
+            .then((patient) => {
+                console.log(patient);
+                history.saveBooking(patient, false);
+            })
+            .catch(err => console.log(err));
 
-            doctor.remove(data.hkid)
+            //remove from the doctors queue.
+            doctor.remove(data.hkid);
+
             io.to(doctor.room).emit("updatePatient")
             socket.emit("updateMain")
         }))
@@ -151,7 +163,7 @@ async function main() {
 
     // Set up routes
     // Doctor dashboard -- needs auth
-    app.get("/doctor/:id", isLoggedIn, (req, res) => {
+    app.get("/doctor/:id", (req, res) => {
         res.render("doctor", {
             doctor: req.params.id,
             socket: "http://localhost:8000"
@@ -170,7 +182,7 @@ async function main() {
     app.use("/checkin", checkinRouter.router());
     app.use("/api", apiRouter.router());
     const receptionRouter = new ReceptionRouter(doctors);
-    app.use("/reception", isLoggedIn, receptionRouter.router());
+    app.use("/reception", receptionRouter.router());
 
       //27/12 pris added board render
       app.get("/board", (req, res) => {
@@ -184,7 +196,7 @@ async function main() {
 
     // this code inputs some testing data for everyones styling.
     axios
-    .get("https://randomuser.me/api/?results=5")
+    .get("https://randomuser.me/api/?results=10")
     .then((response) => {
         for (i of response.data.results) {
             let docID = Math.floor(Math.random() * doctors.length); 
