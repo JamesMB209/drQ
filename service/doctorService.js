@@ -1,12 +1,14 @@
+const { default: knex } = require("knex");
 const History = require("../service/historyService");
 
 class Doctor extends History {
-	constructor(doctor) {
+	constructor(doctor, knex) {
 		super();
 		this.id = doctor.id;
 		this.fName = doctor.f_name;
 		this.lName = doctor.l_name;
 		this.room = doctor.room;
+		this.knex = knex;
 
 		this.fullName = `${doctor.f_name} ${doctor.l_name}`;
 		this.queue = [];
@@ -87,21 +89,37 @@ class Doctor extends History {
 		}
     }
 	
-	remove(hkid) {
+	async remove(hkid) {
+		console.log(`Patient removed from doctor`, this.doctor)
+		console.log("NAME", this.fullName)
+		console.log("ID",this.id)
+		console.log("ROOM",this.room)
+		console.log("The id of this fucking patient is ", this.queue)
 		let patient = this.queue.find(patient => patient.hkid == hkid);
-		console.log(`Wee WEE a ${patient}`)
+		console.log(`Wee WEE a ${patient.fullName}`)
 		let patientPos = this.queue.findIndex(patient => patient.hkid == hkid);
 		console.log(`Hi I'm Poppy.....${patientPos}`)
 		this.queue.splice(patientPos, 1);
 		// let reason = prompt("Reason for deletion: ")
-		return this.knex("queue")
-		.insert({
-			patient_id: 1, // how to get the patients id
+		let patientID;
+		await this.knex('patient')
+		.select("id")
+		.where('id_card', patient.hkid)
+		.then(async (row) => {
+			console.log(`Hi im from historyService`, row[0].id)
+			patientID = await row[0].id
+		}).catch((err) => {
+			console.error(err);
+		})
+		let newHistory = {
+			patient_id: patientID,
 			doctor_id: this.id,
 			checked_in: true,
 			left_wo_seeing: new Date(),
 			// reason: reason
-		})
+		}
+		await this.knex("appointment_history")
+		.insert(newHistory)
 		.then((data) => {
 			console.log(`Patient deleted from queue and time deleted is stored in the database: ${data}`)
 		})

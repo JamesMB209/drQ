@@ -14,8 +14,8 @@ const CheckinRouter = require("./router/checkinRouter");
 // const DoctorRouter = require("./router/doctorRouter");
 const History = require("./service/historyService");
 const history = new History;
-const DoctorRouter = require("./router/doctorRouter");
-const PatientRouter = require("./router/patientRouter.js");
+// const DoctorRouter = require("./router/doctorRouter");
+// const PatientRouter = require("./router/patientRouter.js");
 const setPassport = require("./passport")
 const passportRouter = require("./router/passportRouter")(express)
 
@@ -43,9 +43,9 @@ app.use(express.static('public'));
 
 
 // Passport-local --------------------------------------------- Passport-Local
-const passport = require("passport");
-const LocalStrategy = require("passport-local").Strategy;
-const hashFunctions = require("./brcypt");
+// const passport = require("passport");
+// const LocalStrategy = require("passport-local").Strategy;
+// const hashFunctions = require("./brcypt");
 const session = require("express-session");
 
 app.use(session({
@@ -127,7 +127,7 @@ async function main() {
         })
 
         socket.on("moveUp", (data) => {
-            let doctor = doctors[data.doctor];
+            let doctor = doctors[data.doctor -1];
 
             doctor.move(`${data.hkid}`)
             io.to(doctor.room).emit("updatePatient")
@@ -135,12 +135,18 @@ async function main() {
         })
 
         socket.on("removeQ", (data => {
-            let doctor = doctors[data.doctor];
+            console.log("this is data this is data", data)
+            console.log("and this is the doctors array", doctors)
+            let doctor = doctors[data.doctor - 1];
 
-            doctor.remove(`${data.hkid}`)
+            doctor.remove(data.hkid)
             io.to(doctor.room).emit("updatePatient")
             socket.emit("updateMain")
         }))
+
+        // socket.on("refreshThat", () => {
+        //     socket.emit("updateMain")
+        // })
     });
 
     // Set up routes
@@ -166,23 +172,10 @@ async function main() {
     const receptionRouter = new ReceptionRouter(doctors);
     app.use("/reception", isLoggedIn, receptionRouter.router());
 
-     //25/12 pris added render login and signup
-     app.get("/", (req, res) => {
-        res.render("login")
-    })
-     
-     app.get("/login", (req, res) => {
-         res.render("login")
-     }) 
-
-     app.get("/signup", (req, res) => {
-        res.render("signup")
-    })
-
-      //27/12 pris added board render
-      app.get("/board", (req, res) => {
-        res.render("board")
-    })
+    //   //27/12 pris added board render
+    //   app.get("/board", (req, res) => {
+    //     res.render("board")
+    // })
 
     //25/12 pris added 404 page render (this needs to put at the end of GET req)
     app.all('*', (req, res) => {

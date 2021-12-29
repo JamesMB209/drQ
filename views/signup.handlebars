@@ -8,6 +8,18 @@
 <form <form action="/signup" method="post">
   <p>Sign up for our service <br>(staff only)</p>
   <hr>
+    <label for="f_name">Enter your first name:</label>
+    <br />
+    <input type="text" name="f_name" id="f_name" required>
+    <br />
+    <label for="l_name">Enter your last name:</label>
+    <br />
+    <input type="text" name="l_name" id="l_name" required>
+    <br />
+    <label for="room">Enter your room:</label>
+    <br />
+    <input type="text" name="room" id="room">
+    <br />
     <label for="username">Username <br />
     <input type="text" name="username" id="username" placeholder=" username" required>
     </label>
@@ -20,8 +32,8 @@
     <br />
     <select name="tag" id="tag" required>
         <br>
-        <option name="tag" value="doctor">Doctor</option>
-        <option name="tag" value="reception">Admin</option>
+        <option name="tag" value="Doctor">Doctor</option>
+        <option name="tag" value="Reception">Admin</option>
     </select>
     <br>
     <button type="submit" class="login_btn">CREATE ACCOUNT</button>

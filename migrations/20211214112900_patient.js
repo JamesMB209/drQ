@@ -5,6 +5,7 @@ exports.up = function(knex) {
 		table.string('l_name');
 		table.string('id_card');
 		table.date('dob');
+		table.string('gender');
 	})  
 };
 

@@ -1,5 +1,5 @@
 <div class="page_name" style="background-color: #00c4cc;">
-<h6 class="">Patient's Queue</h6>
+<h5>Patient's Queue</h5>
 
 </div>
 
@@ -38,7 +38,7 @@
             if(patient.queuePosition !== 0) {
               $(".fullName").html(patient.fullName);
               $(".queue_position").html(patient.queuePosition);
-              $(".queueWait").html(patient.queuePosition * 7);
+              $(".queueWait").html(patient.queuePosition * 5);
               axios.get("/api/{{doctor}}")
               .then((response) => {
                 let doctor = response.data.doctor;

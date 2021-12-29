@@ -10,8 +10,8 @@ exports.up = function(knex) {
 	table.timestamps(false, true);
 	table.string('arrival');
 	table.string('departure');
-	table.string('left_wo_seeing');
-	table.string('reason')
+	table.boolean('completed');
+	// table.string('reason');
 	})
 };
 

@@ -43,7 +43,7 @@ module.exports = (app) => {
                     let hash = await hashFunctions.hashPassword(password);
                     let newUser = { username: username, password: hash , tag: req.body.tag };
                     if(newUser.tag == "Doctor") {
-                        let newDoctor = { f_name: req.body.f_name, l_name: req.body.l_name , username: username};
+                        let newDoctor = { f_name: req.body.f_name, l_name: req.body.l_name , username: username, room: req.body.room};
                         let doctorInput = await knex("doctor").insert(newDoctor);
                         console.log(doctorInput);
                     } else {
