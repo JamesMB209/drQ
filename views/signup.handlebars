@@ -38,7 +38,7 @@
     <label for="admin">Admin</label>
  
     <br>
-    <button type="submit" class="login_btn">CREATE ACCOUNT</button>
+    <button type="submit" class="login_btn" style="width: 300px;">CREATE ACCOUNT</button>
     <p class="other_signin">sign up with <a href="#passport"> <img src="/asset/google_logo.png" alt="google" ></a></p>
   
 </form>
@@ -49,3 +49,20 @@
     <img src="/asset/signup.png" alt="doctors">
 </div>
 </section>
+
+<script>
+var password = document.getElementById("password")
+  , confirm_password = document.getElementById("confirm_password");
+
+function validatePassword(){
+  if(password.value != confirm_password.value) {
+    confirm_password.setCustomValidity("Passwords Don't Match");
+  } else {
+    confirm_password.setCustomValidity('');
+  }
+}
+
+password.onchange = validatePassword;
+confirm_password.onkeyup = validatePassword;
+
+</script>

@@ -1,8 +1,18 @@
-<div class="page_name col-10" style="background-color: #AA8F00">
+<section id="doctor">
+
+<div class="row">
+
+
+<div class="page_name col-8 m-4" style="background-color: #AA8F00">
 <h5>Doctor Access</h5>
 </div>
 
-<section id="doctor">
+<div class="logout col-4 d-flex justify-content-end mt-4">
+  <button id="button" style="background-color: #AA8F00; border-radius: 0px;">Log Out</button>
+</div>
+
+</div>
+
 <div class="m-5 doc_info">
 <p> Doctor: <span id="fullName"></span></p>
 <p> Room: <span id="room"></span></p>
@@ -11,8 +21,8 @@
 
 <!--current patient info-->
 <div class="container">
-  
-    <div class="current_patient p-4 m-3">
+  <div class="row">
+    <div class="current_patient p-4 m-3 col-sm-12">
       <h4 class="pb-5" style="color: #AA8F00;">Current Patient</h4>
       <p>Name: <span id="patientFullName"></span></p>
       <p>Gender: <span id="patientGender"></span></p>
@@ -21,18 +31,19 @@
       <p>Visit Reason: <span id="patientVisitReason"></span></p>
       <p>History: <span id="patientHistory"></span></p>
       <p>Arrived time: <span id="patientArrived"></span></p>
-      <p>Diagnosis:<textarea id="diagnosis"></textarea></p>
+      <p>Diagnosis:</p>
+      <textarea id="diagnosis" class="text_diagnosis"></textarea>
     </div>
 
 
 <!--Patient in queue-->
-  <div class="patient_queue p-4 text-center pt-5 m-3">
+  <div class="patient_queue p-4 text-center pt-5 m-3 col-sm-12">
     <h4 class="pb-5" style="color: #AA8F00;"> Patient(s) in queue:</h4>
     <h2 id="queueLength"></h2>
   </div>
 
 </div>
-
+</div>
 
   <div class="btn_area">
 <button id="next" class="next_btn">NEXT PATIENT</button>
@@ -48,9 +59,6 @@
   
 
 </section>
-<div class="logout">
-  <button id="button">Log Out</button>
-</div>
 
 <script>
       $(() => {

@@ -24,7 +24,7 @@ class Board {
     put(req, res) {
         if(Array.isArray(this.doctors[0].queue)) {
             if(this.doctors[0].queue.length === 0) {
-                console.log(`No one in que`)
+                console.log(`No one in queue`)
             } 
         }
     }

@@ -1,6 +1,15 @@
 <section id="admin">
-<div class="page_name col-10 m-4" style="background-color: #00c4cc">
+
+<div class="row">
+
+<div class="page_name col-10 m-4" style="background-color: #007075">
 <h5>Admin Page</h5>
+</div>
+
+<div class="logout col-5 d-flex justify-content-end mt-4">
+  <button id="button" style="background-color: #007075; border-radius: 0px;">Log Out</button>
+</div>
+
 </div>
 
 <div class="row  justify-content-center p-1 my-5">
@@ -13,7 +22,7 @@
         <button class="moveButton m-2" doctor="{{assignedDoctor}}" hkid="{{hkid}}"> Move Up <i class="fas fa-long-arrow-alt-up"></i>  </button>
 
         <span>
-         {{inc @index}}. {{fName}} {{lName}}
+         {{inc @index}}. {{fName}} {{lName}} 
         </span>
         
         <button class="deleteFromQueue" doctor="{{assignedDoctor}}" hkid="{{hkid}}" style="color: red;">Delete</button>
@@ -24,9 +33,7 @@
     {{/each}}
 </div>
 </section>
-<div class="logout">
-  <button id="button">Log Out</button>
-</div>
+
 
 <script>
     $(() => {

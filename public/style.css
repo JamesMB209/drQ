@@ -123,8 +123,11 @@ input:focus {
     margin: -17% auto 10%;
 }
 
-textarea {
-    width: 50vw;
+#checkin textarea {
+    width: 40vw;
+    height: 10vh;
+    border-color: #007075;
+    border-radius: 10px;
 }
 
 /*==============================================================*/
@@ -133,11 +136,10 @@ textarea {
     color: #AA8F00;
 }
 
-#doctor .container{
+#doctor.container{
     display: flex;
     flex-wrap: row wrap;
     justify-content: center;
-    
 }
 
 .current_patient {
@@ -189,6 +191,14 @@ textarea {
     height: auto;
     position:relative;
     margin-left: 10%;
+}
+
+.text_diagnosis {
+    width: 85%;
+    height: 10vh;
+    border-color: #685700a1;
+    margin: 10 0 0 5rem;
+    border-radius: 7px;
 }
 
 /*==============================================================*/
@@ -364,20 +374,6 @@ textarea {
     color: #007075;
 }
 
-/* #admin .flex {
-    display: flex;
-    flex-direction: column;
-    flex-wrap: wrap;
-}
-
-#admin .item {
-    flex: 1;
-    margin: 10px;
-    display: flex;
-    
-} */
-
-
 .queue_list {
    border: 1px solid #006f755f;
    padding-bottom: 50px;
@@ -387,6 +383,16 @@ textarea {
 #admin span {
     margin: 5px;
     font-weight: 500;
+}
+
+.logout {
+    height: 5vh;
+}
+
+/*==============================================================*/
+/* board page */
+#board h4 {
+    color: #007075;
 }
 
 
