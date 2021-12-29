@@ -10,6 +10,8 @@ const Patient = require("./service/patientService");
 // const Queue = require("./service/queueService");
 const ApiRouter = require("./router/apiRouter");
 const ReceptionRouter = require("./router/receptionRouter")
+//pris add Board Router
+const BoardRouter = require("./router/boardRouter");
 const CheckinRouter = require("./router/checkinRouter");
 // const DoctorRouter = require("./router/doctorRouter");
 const History = require("./service/historyService");
@@ -184,10 +186,14 @@ async function main() {
     const receptionRouter = new ReceptionRouter(doctors);
     app.use("/reception", receptionRouter.router());
 
+    //pris add Board Router
+    const boardRouter = new BoardRouter(doctors);
+    app.use("/board", boardRouter.router());
+
       //27/12 pris added board render
-      app.get("/board", (req, res) => {
+   /*    app.get("/board", (req, res) => {
         res.render("board")
-    })
+    }) */
 
     //25/12 pris added 404 page render (this needs to put at the end of GET req)
     app.all('*', (req, res) => {

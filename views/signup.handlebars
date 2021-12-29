@@ -8,24 +8,14 @@
 <form <form action="/signup" method="post">
   <p>Sign up for our service <br>(staff only)</p>
   <hr>
-    <label for="f_name">Enter your first name:</label>
-    <br />
-    <input type="text" name="f_name" id="f_name" required>
-    <br />
-    <label for="l_name">Enter your last name:</label>
-    <br />
-    <input type="text" name="l_name" id="l_name" required>
-    <br />
-    <label for="room">Enter your room:</label>
-    <br />
-    <input type="text" name="room" id="room">
+   
   <label for="f_name">First name</label>
     <br />
-    <input type="text" name="f_name" id="f_name" placeholder=" first name"required>
+    <input type="text" name="f_name" id="f_name" placeholder=" first name">
     <br />
     <label for="l_name">Last name</label>
     <br />
-    <input type="text" name="l_name" id="l_name" placeholder=" last name" required>
+    <input type="text" name="l_name" id="l_name" placeholder=" last name">
     <br />
     <label for="username">Username <br />
     <input type="text" name="username" id="username" placeholder=" username" required>
@@ -36,7 +26,7 @@
     </label>
     <br>
       <label for="password">Confirm Password <br />
-    <input type="password" name="password" id="confirm_password" placeholder=" confirm password" required>
+    <input type="password" name="password" id="confirm_password" placeholder=" confirm password">
     </label>
     <br>
 
@@ -58,28 +48,4 @@
 <div class="item login_img col-6">
     <img src="/asset/signup.png" alt="doctors">
 </div>
-
-{{!-- original form from Peram --}}
-{{!-- <form action="/signup" method="post">
-    <label for="username">Username <br />
-    <input type="text" name="username" id="username" required>
-    </label>
-    <br />
-    <label for="password">Password: <br />
-    <input type="password" name="password" id="password" required>
-    </label>
-    <br />
-    <label for="tag">Choose one:</label>
-    <br />
-    <input type="radio" name="tag" id="doctor" value="Doctor">
-    <label for="doctor">Doctor</label>
-    <input type="radio" name="tag" id="admin" value="admin">
-    <label for="admin">Admin</label>
-    <br />
-    <br />
-    <button type="submit">Create account</button>
-</form>  --}}
-{{!-- original form from Peram --}}
-
-
 </section>

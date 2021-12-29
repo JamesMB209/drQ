@@ -225,7 +225,6 @@ textarea {
     margin-top: 40px;
     box-sizing: border-box;
     letter-spacing: 1.2px;
-    margin: 30px 20px;
     box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
 }
 
@@ -279,6 +278,10 @@ textarea {
     font-weight: 500;
 }
 
+#login input[type=password] {
+    width: 200px;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
 /*==============================================================*/
 /* signup page */
 
@@ -317,14 +320,28 @@ textarea {
     border: 1px solid #a0a0a08e;
     border-radius: 0px;
     margin-bottom: 10px;
-    
+    box-shadow: 0px 1px 1px rgba(0, 0, 0, 0.25); 
 }
 
-
-
 #signup input:focus {
-    background-color: #00c5cc29;
+    background-color: #78c3c529;
   }
+
+  #signup input[type=text], [type=password] {
+    width: 300px;
+}
+
+.signup_btn {
+    width: 300px;
+    height: 40px;
+    font-weight: 300;
+    text-align: center;
+    border-style: none;
+    margin-top: 40px;
+    box-sizing: border-box;
+    letter-spacing: 1.2px;
+    box-shadow: inset 0px 4px 4px rgba(0, 0, 0, 0.25);
+}
 
 /*==============================================================*/
 /* admin page */
