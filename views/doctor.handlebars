@@ -74,6 +74,9 @@
             });
           $("#diagnosis").val("");
           // socket.emit("updateDoctor", {{doctor}});
+          socket.emit("refreshThat", () => {
+            socket.emit("updateMain")
+          })
         });
         
         //set up listners
@@ -107,6 +110,12 @@
             console.log(err);
           });
         });
+        
+        // refresh the page
+        socket.on("updateMain", (e) => {
+          e.preventDefault()
+          location.reload()
+        })
 
         //emit an update request to load the inital data once only.
         socket.emit("updateDoctor", {{doctor}});

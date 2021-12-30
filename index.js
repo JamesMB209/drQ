@@ -128,6 +128,7 @@ async function main() {
         socket.on("updateDoctor", (data) => {
             let doctor = doctors[data - 1];
             io.to(doctor.room).emit("updateDoctor");
+            socket.emit("refreshThat")
         });
 
         socket.on("moveUp", (data) => {
@@ -154,6 +155,7 @@ async function main() {
 
             io.to(doctor.room).emit("updatePatient")
             socket.emit("updateMain")
+            io.emit("updateDoctor");
         }))
 
         socket.on("refreshThat", () => {
