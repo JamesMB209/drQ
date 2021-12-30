@@ -35,8 +35,7 @@ app.use(express.json());
 
 //pris added index for handlebars
 const Handlebars = require("handlebars");
-Handlebars.registerHelper("inc", function(value, options)
-{
+Handlebars.registerHelper("inc", function (value, options) {
     return parseInt(value) + 1;
 });
 //end pris added index for handlebars
@@ -68,7 +67,7 @@ async function main() {
     // Check for logged in auth
     function isLoggedIn(req, res, next) {
         console.log(req.isAuthenticated())
-        if(req.isAuthenticated()) {
+        if (req.isAuthenticated()) {
             return next()
         } else {
             res.redirect("/login")
@@ -81,7 +80,7 @@ async function main() {
         .select("id", "f_name", "l_name", "room")
 
     db_doctor.forEach((row) => {
-        doctors.push(new Doctor(row, knex));
+        doctors.push(new Doctor(row));
     })
 
     // set up routers dependent on our doctor objects.
@@ -108,45 +107,47 @@ async function main() {
             //advance the doctors queue.
             doctor.next();
 
-            io.to(doctor.room).emit("updatePatient")
-        })
+            io.to(doctor.room).emit("updateDoctor");
+            io.to(doctor.room).emit("updatePatient");
+            socket.emit("updateMain");
+        });
 
         socket.on("newPatient", (data) => {
             let doctor = doctors[data - 1];
 
-            io.to(doctor.room).emit("updatePatient")
-            io.to(doctor.room).emit("updateDoctor")
-            socket.emit("updateMain") // update /reception when new patient is connected
-        })
+            io.to(doctor.room).emit("updatePatient");
+            io.to(doctor.room).emit("updateDoctor");
+            socket.emit("updateMain");
+        });
 
         socket.on("updatePatient", (data) => {
             let doctor = doctors[data - 1];
-            io.to(doctor.room).emit("updatePatient")
-        })
+            io.to(doctor.room).emit("updatePatient");
+        });
 
         socket.on("updateDoctor", (data) => {
             let doctor = doctors[data - 1];
-            io.to(doctor.room).emit("updateDoctor")
-        })
+            io.to(doctor.room).emit("updateDoctor");
+        });
 
         socket.on("moveUp", (data) => {
-            let doctor = doctors[data.doctor -1];
+            let doctor = doctors[data.doctor - 1];
 
-            doctor.move(`${data.hkid}`)
-            io.to(doctor.room).emit("updatePatient")
-            socket.emit("updateMain")
-        })
+            doctor.move(`${data.hkid}`);
+            io.to(doctor.room).emit("updatePatient");
+            socket.emit("updateMain");
+        });
 
         socket.on("removeQ", (data => {
             let doctor = doctors[data.doctor - 1];
-            
+
             //update the appointment history database.
             doctor.patient(data.hkid)
-            .then((patient) => {
-                // console.log(patient);
-                history.saveBooking(patient, false);
-            })
-            .catch(err => console.log(err));
+                .then((patient) => {
+                    // console.log(patient);
+                    history.saveBooking(patient, false);
+                })
+                .catch(err => console.log(err));
 
             //remove from the doctors queue.
             doctor.remove(data.hkid);
@@ -154,6 +155,10 @@ async function main() {
             io.to(doctor.room).emit("updatePatient")
             socket.emit("updateMain")
         }))
+
+        socket.on("refreshThat", () => {
+            io.emit("updateMain");
+        });
     });
 
     // Set up routes
@@ -183,10 +188,10 @@ async function main() {
     const boardRouter = new BoardRouter(doctors);
     app.use("/board", boardRouter.router());
 
-      //27/12 pris added board render
-   /*    app.get("/board", (req, res) => {
-        res.render("board")
-    }) */
+    //27/12 pris added board render
+    /*    app.get("/board", (req, res) => {
+         res.render("board")
+     }) */
 
     //25/12 pris added 404 page render (this needs to put at the end of GET req)
     app.all('*', (req, res) => {
@@ -194,27 +199,52 @@ async function main() {
     })
 
     // this code inputs some testing data for everyones styling.
+
     axios
-    .get("https://randomuser.me/api/?results=30")
-    .then((response) => {
-        for (i of response.data.results) {
-            let docID = Math.floor(Math.random() * doctors.length); 
-            let hkid = `${i.location.postcode}`.split(' ').join('');
+        .get("https://randomuser.me/api/?results=15")
+        .then((response) => {
+            for (i of response.data.results) {
+                let docID = Math.floor(Math.random() * doctors.length);
+                let hkid = `${i.location.postcode}`.split(' ').join('');
 
-            doctors[docID].addToQueue(new Patient({
-                fName:i.name.first,
-                lName:i.name.last,
-                temperature:Math.floor(Math.random()*3)+36,
-                hkid: hkid,
-                dob:i.dob.date,
-                gender:i.gender,
-                doctor: docID + 1,
-            }));
+                doctors[docID].addToQueue(new Patient({
+                    fName: i.name.first,
+                    lName: i.name.last,
+                    temperature: Math.floor(Math.random() * 3) + 36,
+                    hkid: hkid,
+                    dob: i.dob.date,
+                    gender: i.gender,
+                    doctor: docID + 1,
+                }));
 
-            console.log(`${i.name.first} ${i.name.last}:http://localhost:8000/queue/${docID +1}/${hkid}`)
-            
-        }
-    })
+                console.log(`${i.name.first} ${i.name.last}:http://localhost:8000/queue/${docID + 1}/${hkid}`)
+
+            }
+        })
+
+
+    // setInterval(() => {
+    //     axios
+    //         .get("https://randomuser.me/api/?results=3")
+    //         .then((response) => {
+    //             for (i of response.data.results) {
+    //                 let docID = Math.floor(Math.random() * doctors.length);
+    //                 let hkid = `${i.location.postcode}`.split(' ').join('');
+
+    //                 doctors[docID].addToQueue(new Patient({
+    //                     fName: i.name.first,
+    //                     lName: i.name.last,
+    //                     temperature: Math.floor(Math.random() * 3) + 36,
+    //                     hkid: hkid,
+    //                     dob: i.dob.date,
+    //                     gender: i.gender,
+    //                     doctor: docID + 1,
+    //                 }));
+
+    //                 console.log(`${i.name.first} ${i.name.last}:http://localhost:8000/queue/${docID + 1}/${hkid}`)
+
+    //             }
+    //         })}, 90000);
 }
 main();
 

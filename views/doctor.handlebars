@@ -72,8 +72,8 @@
             doctorId:{{doctor}},
             diagnosis:$("#diagnosis").val(),
             });
-          socket.emit("updateDoctor", {{doctor}});
           $("#diagnosis").val("");
+          // socket.emit("updateDoctor", {{doctor}});
         });
         
         //set up listners

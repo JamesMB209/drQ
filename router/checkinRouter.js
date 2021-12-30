@@ -1,7 +1,5 @@
 const express = require("express");
 const Patient = require("../service/patientService");
-const History = require("../service/historyService");
-const history = new History;
 
 class CheckinRouter {
     constructor(doctors) {
@@ -26,14 +24,9 @@ class CheckinRouter {
     //route to create new patient
     post(req, res) {
         let doctor = this.doctors[parseInt(req.body.doctor) - 1];
-        // //#######Code Me########
-        // // Need to sanitise input. -- currrently done on the front end.
-        // // If valid create new patient.
-        // // Add this paitent to the doctors queue.
         doctor.addToQueue(new Patient(req.body));
-        // // redirect to paitent dashboard "/queue/:doctor/:patient"
         let patientURL = `${req.body.hkid}`.split(" ").join("");
-        res.redirect(302, `/queue/${doctor.id}/${patientURL}`) //not sanatised.
+        res.redirect(302, `/queue/${doctor.id}/${patientURL}`)
     }
 }
 

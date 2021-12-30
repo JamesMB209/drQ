@@ -46,6 +46,7 @@
           })
           socket.emit("updateMain")
         });
+
         $(".deleteFromQueue").on("click", (e) => {
             if(confirm(`Delete from queue? Action cannot be undone!`) == true) {
                 socket.emit("removeQ", {
@@ -53,12 +54,11 @@
                     hkid: e.currentTarget.attributes.hkid.nodeValue
                 })
                 socket.emit("updateMain")
-            } else {
-                return
             }
         })
         // refresh the page
         socket.on("updateMain", () => {
+            console.log("triggered");
             location.reload()
         })
     })
