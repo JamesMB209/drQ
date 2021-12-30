@@ -39,7 +39,7 @@ module.exports = (express) => {
                 req.login(user, err => console.log(err))
                 console.log(`The id of this ducker is ${id}`)
                 return res.redirect(`/doctor/${id}`)
-            } else if (user.tag == "Reception") {
+            } else if (user.tag == "admin") {
                 let getAdminId = await knex('admin').where({username: user.username})
                 .then((ok) => {
                     console.log(ok[0].id)

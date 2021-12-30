@@ -121,13 +121,11 @@ async function main() {
 
         socket.on("updatePatient", (data) => {
             let doctor = doctors[data - 1];
-
             io.to(doctor.room).emit("updatePatient")
         })
 
         socket.on("updateDoctor", (data) => {
             let doctor = doctors[data - 1];
-
             io.to(doctor.room).emit("updateDoctor")
         })
 
@@ -156,10 +154,6 @@ async function main() {
             io.to(doctor.room).emit("updatePatient")
             socket.emit("updateMain")
         }))
-
-        // socket.on("refreshThat", () => {
-        //     socket.emit("updateMain")
-        // })
     });
 
     // Set up routes
@@ -201,7 +195,7 @@ async function main() {
 
     // this code inputs some testing data for everyones styling.
     axios
-    .get("https://randomuser.me/api/?results=1")
+    .get("https://randomuser.me/api/?results=30")
     .then((response) => {
         for (i of response.data.results) {
             let docID = Math.floor(Math.random() * doctors.length); 

@@ -7,57 +7,56 @@
    
     {{#each doctor}}
         <div class="col-lg-3 col-md-6 col-sm-12 m-3 queue_list text-center p-4">
-            <h4 class="docNames ">
+            <h4 class="docNames my-4 ">
                 Dr. {{fullName}} <br> 
                 Room: {{room}}</h4>
             <br>
            
-             <h4 id="queueLength">Calling:{{fName}}  </h4>
-            <h4>Total in queue: {{queue.length}}</h4>
+             <h4 id="queueLength" class="mb-4">Calling: <span id="{{id}}patientId"></span></h4>
+            <h4 class="mb-4">Total in queue: <span id="{{id}}queueLength"></span></h4>
         </div>
     {{/each}}
     
 </div>
 </section>
 
+<div class="container">
+    <div class="patient_img text-center"> <img src="./asset/4.png" alt="" width="50%" >
+      <div class="patient_rec text-center col-12">
+    </div>
+  </div>
+</div>
+
 
 <script>
       $(() => {
         //Set up socket connection
         let socket = io.connect("{{socket}}");
-        socket.emit("start", {{doctor}});
-        
+        {{#each doctor}}
+        socket.emit("start", {{id}});
+
         //set up listners
         socket.on("updateDoctor", () => {
           axios
-          .get("/api/{{doctor}}")
+          .get("/api/{{id}}")
           .then((response) => {
             let doctor = response.data.doctor;
             let patient = doctor.queue[0];
 
             //doctor details
-            $("#fName").html(doctor.fName);
-            $("#lName").html(doctor.lName);
-            $("#fullName").html(doctor.fullName);
-            $("#room").html(doctor.room);
-            $("#queueLength").html(response.data.queueLength);
+            $("#{{id}}queueLength").html(response.data.queueLength);
 
             //patient details
-            $("#patientFullName").html(patient.fullName);
-            $("#patientGender").html(patient.gender);
-            $("#patientAge").html(new Date().getFullYear() - new Date(patient.dob).getFullYear());
-            $("#patientDob").html(new Date(patient.dob).toLocaleDateString());
-            $("#patientArrived").html(new Date(patient.arrived).toLocaleString());
-            $("#patientVisitReason").html(patient.visitReason);
-            $("#patientHistory").html(patient.history);
+            $("#{{id}}patientId").html(patient.id);
           })
-          
+
           .catch((err) => {
             console.log(err);
           });
         });
 
         //emit an update request to load the inital data once only.
-        socket.emit("updateDoctor", {{doctor}});
+        socket.emit("updateDoctor", {{id}});
+        {{/each}}
       });
     </script>

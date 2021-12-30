@@ -26,7 +26,11 @@
     </label>
     <br>
       <label for="password">Confirm Password <br />
-    <input type="password" name="password" id="confirm_password" placeholder=" confirm password">
+    <input type="password" name="confirm_password" id="confirm_password" placeholder=" confirm password">
+    </label>
+    <br>
+    <label for="room">Doctor's Room <br />
+    <input type="text" name="room" id="room" placeholder=" room no.">
     </label>
     <br>
 
@@ -59,10 +63,10 @@ function validatePassword(){
     confirm_password.setCustomValidity("Passwords Don't Match");
   } else {
     confirm_password.setCustomValidity('');
+    confirm_password.reportValidity()
   }
 }
 
-password.onchange = validatePassword;
 confirm_password.onkeyup = validatePassword;
 
 </script>
