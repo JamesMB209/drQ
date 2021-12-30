@@ -17,16 +17,18 @@ class Patient extends History {
 		
 		this.id;
 		this.queuePosition;
-		this.departed;
+		this.history = [];
 
 		this.init();
 	}
 
-	init() {
-		this.addPatient(this)
-		.then((id) => {
-			this.id = id[0];
-		}).catch(err => console.log(err));
+	async init() {
+		try {
+			[this.id] = await this.addPatient(this);
+			this.history = await this.diaganosisHistory(this.id);
+		} catch (err) {
+			console.log(err);
+		}
 	}
 }
 

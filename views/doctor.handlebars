@@ -90,9 +90,11 @@
             $("#patientDob").html(new Date(patient.dob).toLocaleDateString());
             $("#patientArrived").html(new Date(patient.arrived).toLocaleString());
             $("#patientVisitReason").html(patient.visitReason);
-            $("#patientHistory").html(patient.history);
+            patient.history.forEach((note) => {$("#patientHistory").append(
+              `${new Date(note.created_at).toLocaleDateString()}: ${note.diagnosis}<br>`
+              )});
           })
-          
+          //, note.diagnosis+"<br>"
           .catch((err) => {
             console.log(err);
           });

@@ -96,13 +96,12 @@ async function main() {
         });
 
         socket.on("next", (data) => {
-            console.log(data);
             let doctor = doctors[data.doctorId - 1];
             console.log(`${doctor.fullName} is asking for the next patient`);
 
             //logic for what happens on a doctor pressing "next".
             //update the appointment history.
-            history.saveDiagnosis(doctor.id, doctor.queue[0].id, data.diagnosis);
+            history.saveDiagnosis(doctor.id, doctor.queue[0], data.diagnosis);
             history.saveBooking(doctor.queue[0], true);
             //advance the doctors queue.
             doctor.next();
@@ -144,7 +143,7 @@ async function main() {
             //update the appointment history database.
             doctor.patient(data.hkid)
             .then((patient) => {
-                console.log(patient);
+                // console.log(patient);
                 history.saveBooking(patient, false);
             })
             .catch(err => console.log(err));
@@ -196,7 +195,7 @@ async function main() {
 
     // this code inputs some testing data for everyones styling.
     axios
-    .get("https://randomuser.me/api/?results=10")
+    .get("https://randomuser.me/api/?results=1")
     .then((response) => {
         for (i of response.data.results) {
             let docID = Math.floor(Math.random() * doctors.length); 
