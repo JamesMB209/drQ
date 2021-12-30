@@ -12,7 +12,7 @@ class History {
 		.where('id_card', patient.hkid)
 		.then((row) => {
 			if(row.length === 1) {
-				console.log("Returning patient.");
+				return [row[0].id];
 			} else {
 				return knex('patient')
 				.insert({
@@ -58,19 +58,18 @@ class History {
 		})
 	}
 
-	saveDiagnosis(doctorId, patientId, diagnosis) {
+	saveDiagnosis(doctorId, patient, diagnosis) {
 		/** 
 		 * inserts a new row into the "diagnosis table"
 		 */
 
-		if (diagnosis === undefined) {
-			console.error("nothing to input");
+		if (diagnosis === undefined || patient === undefined) {
 		 	return;
 		}
 
 		knex('diagnosis')
 		.insert({
-			patient_id: patientId,
+			patient_id: patient.id,
 			doctor_id: doctorId,
 			diagnosis: diagnosis,
 		}).then(() => {
@@ -80,14 +79,12 @@ class History {
 		})
 	}
 
-	// Ill keep this here for now.
-	// list() {
-	// 	return knex('appointment_history')
-	// 		.innerJoin('patient', 'appointment_history.patient_id', 'patient.id')
-	// 		.select('appointment_history.id', 'appointment_history.doctor_id', 'patient.f_name', 'patient.l_name')
-	// 		.where('appointment_history.doctor_id', this.id)
-	// 		.orderBy('created_at', 'asc');
-	// }
+	diaganosisHistory(id) {
+		return knex('diagnosis')
+			.select('diagnosis', 'created_at')
+			.where('patient_id', id)
+			.orderBy('created_at', 'asc');
+	}
 }
 
 module.exports = History;

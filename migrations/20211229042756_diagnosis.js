@@ -7,6 +7,7 @@ exports.up = function(knex) {
         table.integer('doctor_id');
         table.foreign('doctor_id').references('doctor.id');
         table.string('diagnosis');
+        table.timestamps(false, true);
     }) 
 };
 
