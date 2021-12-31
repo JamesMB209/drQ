@@ -20,6 +20,7 @@ class History {
 					l_name: patient.lName,
 					id_card: patient.hkid,
 					dob: patient.dob,
+					gender: patient.gender,
 				})
 				.returning("id")
 				.catch((err) => {

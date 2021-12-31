@@ -7,17 +7,12 @@ const knex = require('knex')(knexFile);
 const axios = require('axios')
 const Doctor = require("./service/doctorService");
 const Patient = require("./service/patientService");
-// const Queue = require("./service/queueService");
 const ApiRouter = require("./router/apiRouter");
 const ReceptionRouter = require("./router/receptionRouter")
-//pris add Board Router
 const BoardRouter = require("./router/boardRouter");
 const CheckinRouter = require("./router/checkinRouter");
-// const DoctorRouter = require("./router/doctorRouter");
 const History = require("./service/historyService");
 const history = new History;
-// const DoctorRouter = require("./router/doctorRouter");
-// const PatientRouter = require("./router/patientRouter.js");
 const setPassport = require("./passport")
 const passportRouter = require("./router/passportRouter")(express)
 
@@ -44,9 +39,6 @@ app.use(express.static('public'));
 
 
 // Passport-local --------------------------------------------- Passport-Local
-// const passport = require("passport");
-// const LocalStrategy = require("passport-local").Strategy;
-// const hashFunctions = require("./brcypt");
 const session = require("express-session");
 
 app.use(session({
@@ -165,7 +157,7 @@ async function main() {
 
     // Set up routes
     // Doctor dashboard -- needs auth
-    app.get("/doctor/:id", (req, res) => {
+    app.get("/doctor/:id", isLoggedIn, (req, res) => {
         res.render("doctor", {
             doctor: req.params.id,
             socket: "http://localhost:8000"
@@ -184,7 +176,7 @@ async function main() {
     app.use("/checkin", checkinRouter.router());
     app.use("/api", apiRouter.router());
     const receptionRouter = new ReceptionRouter(doctors);
-    app.use("/reception", receptionRouter.router());
+    app.use("/reception", isLoggedIn, receptionRouter.router());
 
     //pris add Board Router
     const boardRouter = new BoardRouter(doctors);
