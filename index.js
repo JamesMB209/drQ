@@ -52,8 +52,8 @@ setPassport(app);
 app.use('/', passportRouter);
 // **Passport**
 
-http.listen(8000);
-console.log("App listening to port 8000")
+http.listen(process.env.PORT);
+console.log(`App listening to port ${process.env.PORT}`)
 
 async function main() {
     // Check for logged in auth
@@ -137,7 +137,6 @@ async function main() {
             //update the appointment history database.
             doctor.patient(data.hkid)
                 .then((patient) => {
-                    // console.log(patient);
                     history.saveBooking(patient, false);
                 })
                 .catch(err => console.log(err));
@@ -160,7 +159,7 @@ async function main() {
     app.get("/doctor/:id", isLoggedIn, (req, res) => {
         res.render("doctor", {
             doctor: req.params.id,
-            socket: "http://localhost:8000"
+            socket: `${process.env.SOCKET}`
         });
     });
 
@@ -169,7 +168,7 @@ async function main() {
         res.render("patient", {
             patient: req.params.patient,
             doctor: req.params.doctor,
-            socket: "http://localhost:8000"
+            socket: `${process.env.SOCKET}`
         })
     });
 
@@ -211,7 +210,7 @@ async function main() {
                     doctor: docID + 1,
                 }));
 
-                console.log(`${i.name.first} ${i.name.last}:http://localhost:8000/queue/${docID + 1}/${hkid}`)
+                console.log(`${i.name.first} ${i.name.last}:${process.env.SOCKET}/queue/${docID + 1}/${hkid}`)
 
             }
         })
