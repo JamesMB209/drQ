@@ -67,19 +67,3 @@
   </div>
 </div>
 </section>
-
-<script>
-    $(() => {
-        let socket = io.connect("{{socket}}")
-
-        $("#refresher").on("click", () => {
-          socket.emit("refreshThat", () => {
-            socket.emit("updateMain")
-          })
-        });
-        // refresh the page
-        socket.on("updateMain", () => {
-            location.reload()
-        })
-    })
-</script>

@@ -65,5 +65,6 @@
 
         //emit a new patient to display the patient in the system and force the data for this patient to load once.
         socket.emit("newPatient", {{doctor}});
+	socket.emit("refreshThat");
       });
 </script>

@@ -39,23 +39,17 @@ module.exports = (app) => {
                 if (users.length > 0) {
                     return done(null, false, {message: req.flash(`Username already exists`)})
                 } else {
-                    console.log("running")
                     let hash = await hashFunctions.hashPassword(password);
                     let newUser = { username: username, password: hash , tag: req.body.tag };
                     if(newUser.tag == "Doctor") {
                         let newDoctor = { f_name: req.body.f_name, l_name: req.body.l_name , username: username, room: req.body.room};
                         let doctorInput = await knex("doctor").insert(newDoctor);
-                        console.log(doctorInput);
                     } else {
                         let newAdmin = { f_name: req.body.f_name, l_name: req.body.l_name, username: username }
                         let adminInput = await knex("admin").insert(newAdmin);
-                        console.log(adminInput);
                     }
                     let userId = await knex("users").insert(newUser).returning("id");
                     let newUserId = userId[0];
-                    console.log(`userId ${userId}`)
-                    console.log(`usernew ${newUser}`)
-                    console.log(`newnewnewnwe${newUserId}`)
                     done(null, newUserId)
             }
             } catch (error) {
