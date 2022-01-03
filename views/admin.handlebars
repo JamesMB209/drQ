@@ -54,7 +54,8 @@
         let socket = io.connect("{{socket}}")
 
         $(".moveButton").on("click", (e) => {
-          socket.emit("moveUp", {
+          	console.log(e)
+		socket.emit("moveUp", {
               doctor: e.currentTarget.attributes.doctor.nodeValue,
               hkid: e.currentTarget.attributes.hkid.nodeValue
           })

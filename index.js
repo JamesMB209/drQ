@@ -53,7 +53,7 @@ app.use('/', passportRouter);
 // **Passport**
 
 http.listen(8000);
-console.log("App listening to port 8000")
+console.log("App listening to web")
 
 async function main() {
     // Check for logged in auth
@@ -160,7 +160,7 @@ async function main() {
     app.get("/doctor/:id", isLoggedIn, (req, res) => {
         res.render("doctor", {
             doctor: req.params.id,
-            socket: "http://localhost:8000"
+            socket: "http://13.213.209.141/"
         });
     });
 
@@ -169,7 +169,7 @@ async function main() {
         res.render("patient", {
             patient: req.params.patient,
             doctor: req.params.doctor,
-            socket: "http://localhost:8000"
+            socket: "http://13.213.209.141/"
         })
     });
 
@@ -211,7 +211,7 @@ async function main() {
                     doctor: docID + 1,
                 }));
 
-                console.log(`${i.name.first} ${i.name.last}:http://localhost:8000/queue/${docID + 1}/${hkid}`)
+                console.log(`${i.name.first} ${i.name.last}:http://13.213.209.141/queue/${docID + 1}/${hkid}`)
 
             }
         })
@@ -235,7 +235,7 @@ async function main() {
     //                     doctor: docID + 1,
     //                 }));
 
-    //                 console.log(`${i.name.first} ${i.name.last}:http://localhost:8000/queue/${docID + 1}/${hkid}`)
+    //                 console.log(`${i.name.first} ${i.name.last}:http://13.213.209.141/queue/${docID + 1}/${hkid}`)
 
     //             }
     //         })}, 90000);

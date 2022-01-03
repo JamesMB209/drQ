@@ -16,7 +16,7 @@ class Board {
     get(req, res) {
             res.render("board", {
                 doctor: this.doctors,
-                socket: "http://localhost:8000"
+                socket: "http://13.213.209.141/"
             })
     }
 }
